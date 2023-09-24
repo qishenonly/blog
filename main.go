@@ -3,6 +3,7 @@ package main
 import (
 	"blog/core"
 	"blog/global"
+	"blog/routers"
 )
 
 func main() {
@@ -17,5 +18,9 @@ func main() {
 	global.DB = core.InitGorm()
 
 	// 初始化路由
+	router := routers.InitRouter()
+
 	// 启动服务
+	global.Logger.Infof("服务启动成功，监听端口：%s", global.Config.System.GetAddr())
+	router.Run(global.Config.System.GetAddr())
 }
