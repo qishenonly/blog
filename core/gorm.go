@@ -5,14 +5,13 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"log"
 	"time"
 )
 
 func InitGorm() *gorm.DB {
 	// 判断数据库配置信息是否为空
 	if global.Config.Mysql.Host == "" && global.Config.Mysql.Port == 0 {
-		log.Fatal("数据库配置信息为空")
+		global.Logger.Warnln("数据库配置信息为空")
 		return nil
 	}
 	dsn := global.Config.Mysql.GetDSN()
@@ -31,14 +30,14 @@ func InitGorm() *gorm.DB {
 		Logger: mysqlLogger,
 	})
 	if err != nil {
-		log.Fatalf("[%s] 连接数据库失败: %s", dsn, err)
+		global.Logger.Fatalf("[%s] 连接数据库失败: %s", dsn, err)
 		return nil
 	}
 
 	// 设置连接池
 	sqlDB, err := db.DB()
 	if err != nil {
-		log.Fatalf("设置连接池失败: %s", err)
+		global.Logger.Fatalf("设置连接池失败: %s", err)
 		return nil
 	}
 	// 设置空闲连接池中的最大连接数
@@ -48,7 +47,7 @@ func InitGorm() *gorm.DB {
 	// 设置了连接可复用的最大时间
 	sqlDB.SetConnMaxLifetime(time.Hour * 3)
 
-	log.Println("数据库连接成功")
+	global.Logger.Infof("数据库连接成功")
 	return db
 
 }
