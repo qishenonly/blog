@@ -13,7 +13,7 @@ type MessageModel struct {
 	IsRead bool `gorm:"not null;default:false;comment:'是否已读'" json:"is_read"`
 
 	// 消息发送者
-	Sender UserModel `gorm:"foreignkey:ID;association_foreignkey:ID;" json:"sender"`
+	Sender UserModel `gorm:"foreignkey:SenderID;association_foreignkey:ID;" json:"sender"`
 
 	// 消息发送者 ID
 	SenderID uint `gorm:"not null;default:0;comment:'消息发送者 ID'" json:"sender_id"`
@@ -25,7 +25,7 @@ type MessageModel struct {
 	SenderAvatar string `gorm:"type:varchar(100);default:''" json:"sender_avatar"`
 
 	// 消息接收者
-	Receiver UserModel `gorm:"foreignkey:ID;association_foreignkey:ID;" json:"receiver"`
+	Receiver UserModel `gorm:"foreignkey:ReceiverID;association_foreignkey:ID;" json:"receiver"`
 
 	// 消息接收者 ID
 	ReceiverID uint `gorm:"not null;default:0;comment:'消息接收者 ID'" json:"receiver_id"`

@@ -34,7 +34,7 @@ type UserModel struct {
 	OpenId string `gorm:"type:varchar(50);not null;default:'';comment:'其他平台的唯一标识'" json:"open_id"`
 
 	// 注册来源
-	RegisterSource _type.RegisterSource `gorm:"type:varchar(20);not null;default:'';comment:'注册来源'" json:"RegisterSource"`
+	RegisterSource _type.RegisterSource `gorm:"type:varchar(20);not null;default:1;comment:'注册来源'" json:"RegisterSource"`
 
 	// 地址
 	Address string `gorm:"type:varchar(100);not null;default:'';comment:'地址'" json:"address"`
@@ -55,7 +55,7 @@ type UserModel struct {
 	Articles []ArticleModel `gorm:"many2many:user_article;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"articles"`
 
 	// 收藏的文章列表
-	CollectArticles []ArticleModel `gorm:"many2many:user_collect_article;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"collect_articles"`
+	CollectArticles []ArticleModel `gorm:"many2many:user_collect;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"collect_articles"`
 
 	// 关注的用户列表
 	FollowUsers []UserModel `gorm:"many2many:user_follow_user;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"follow_users"`

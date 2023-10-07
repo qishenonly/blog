@@ -43,7 +43,7 @@ type ArticleModel struct {
 	TagModel []TagModel `gorm:"many2many:article_tag;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"TagModel"`
 
 	// 文章标签
-	Tags _type.TagsArray `gorm:"type: varchar(20);not null;default:'';comment:'文章标签'" json:"tags"`
+	Tags _type.TagsArray `gorm:"type: varchar(20);not null;default:1;comment:'文章标签'" json:"tags"`
 
 	// 来源
 	Source string `gorm:"type:varchar(20);not null;default:'';comment:'来源'" json:"source"`
