@@ -27,6 +27,9 @@ type ArticleModel struct {
 	// 评论数
 	CommentNum int `gorm:"not null;default:0;comment:'评论数'" json:"comment_num"`
 
+	// 评论列表
+	Comments []CommentModel `gorm:"foreignkey:ID;association_foreignkey:ID;" json:"comments"`
+
 	// 分类
 	Category string `gorm:"type:varchar(20);not null;default:'';comment:'分类（标签）'" json:"category"`
 
@@ -53,4 +56,7 @@ type ArticleModel struct {
 
 	// 文章封面 ID
 	BannerID uint `gorm:"not null;default:0;comment:'文章封面 ID'" json:"banner_id"`
+
+	// 文章封面 PATH
+	BannerPath string `gorm:"type:varchar(100);not null;default:'';comment:'文章封面 PATH'" json:"banner_path"`
 }
