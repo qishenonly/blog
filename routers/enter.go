@@ -2,6 +2,7 @@ package routers
 
 import (
 	"blog/global"
+	"blog/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +16,9 @@ func InitRouter() *gin.Engine {
 
 	// 初始化路由
 	router := gin.Default()
+	for _, handlerFunc := range middlewares.GetAllMiddleware() {
+		router.Use(handlerFunc)
+	}
 
 	// 初始化路由组
 	apiRouterGroup := router.Group("/api")

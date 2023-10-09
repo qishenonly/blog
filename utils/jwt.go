@@ -78,3 +78,39 @@ func ValidToken(tokenString string) (bool, error) {
 	}
 	return true, err
 }
+
+// GetUserIdFromToken 从token中获取用户id
+func GetUserIdFromToken(tokenString string) (int64, error) {
+	claims, err := ParseToken(tokenString)
+	if err != nil {
+		return 0, err
+	}
+	return claims.UserId, nil
+}
+
+// GetUsernameFromToken 从token中获取用户名
+func GetUsernameFromToken(tokenString string) (string, error) {
+	claims, err := ParseToken(tokenString)
+	if err != nil {
+		return "", err
+	}
+	return claims.Username, nil
+}
+
+// GetNicknameFromToken 从token中获取昵称
+func GetNicknameFromToken(tokenString string) (string, error) {
+	claims, err := ParseToken(tokenString)
+	if err != nil {
+		return "", err
+	}
+	return claims.Nickname, nil
+}
+
+// GetRoleFromToken 从token中获取权限
+func GetRoleFromToken(tokenString string) (string, error) {
+	claims, err := ParseToken(tokenString)
+	if err != nil {
+		return "", err
+	}
+	return claims.Role, nil
+}
