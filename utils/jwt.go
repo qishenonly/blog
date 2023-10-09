@@ -22,11 +22,11 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-var MySecret []byte
+var jwtSecret []byte
 
 // GenerateToken 生成token
 func GenerateToken(payload JwtPayload) (string, error) {
-	MySecret = []byte(global.Config.Jwt.Secret)
+	jwtSecret = []byte(global.Config.Jwt.Secret)
 
 	claims := Claims{
 		payload,
@@ -37,15 +37,15 @@ func GenerateToken(payload JwtPayload) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(MySecret)
+	return token.SignedString(jwtSecret)
 }
 
 // ParseToken 解析token
 func ParseToken(tokenString string) (*Claims, error) {
-	MySecret = []byte(global.Config.Jwt.Secret)
+	jwtSecret = []byte(global.Config.Jwt.Secret)
 
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return MySecret, nil
+		return jwtSecret, nil
 	})
 	if err != nil {
 		global.Logger.Errorf("解析token失败: %v", err)
@@ -55,4 +55,26 @@ func ParseToken(tokenString string) (*Claims, error) {
 		return claims, nil
 	}
 	return nil, errors.New("解析token失败")
+}
+
+// ValidToken 校验token是否过期
+func ValidToken(tokenString string) (bool, error) {
+	jwtSecret = []byte(global.Config.Jwt.Secret)
+
+	tokenClaims, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if tokenClaims != nil {
+		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
+			expiresTime := (claims.ExpiresAt).Unix()
+			now := time.Now().Unix()
+			if now > expiresTime {
+				//token过期了
+				return true, nil
+			}
+			return false, nil
+		}
+	}
+	return true, err
 }

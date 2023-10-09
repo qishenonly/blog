@@ -34,5 +34,5 @@ qq:
 
 jwt:
   secret: xxx
-  expire: 3600
+  expire: 3
   issuer: blog
