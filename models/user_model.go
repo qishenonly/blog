@@ -78,7 +78,7 @@ type UserModel struct {
 }
 
 func (u *UserModel) BeforeCreate(tx *gorm.DB) (err error) {
-	u.ActivationToken = utils.Rand(20)
+	u.ActivationToken = utils.RandString(20)
 	return
 }
 

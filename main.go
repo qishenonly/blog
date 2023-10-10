@@ -18,6 +18,9 @@ func main() {
 	// 初始化数据库
 	global.DB = core.InitGorm()
 
+	// 初始化缓存
+	global.Cache = core.InitCache()
+
 	//
 	option := cmd.ParseOptions()
 	if cmd.IsStopWebServer(*option) {

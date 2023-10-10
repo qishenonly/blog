@@ -27,6 +27,9 @@ func InitRouter() *gin.Engine {
 	// 系统配置路由组
 	routerGroup.InitSettingRouter()
 
+	// Auth 路由组
+	routerGroup.InitAuthRouter()
+
 	return router
 
 }

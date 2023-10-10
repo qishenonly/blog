@@ -6,7 +6,7 @@ import (
 )
 
 func TestGenerateToken(t *testing.T) {
-	InitCnf()
+	//InitCnf()
 
 	token, err := GenerateToken(JwtPayload{
 		UserId:   1,
@@ -20,7 +20,7 @@ func TestGenerateToken(t *testing.T) {
 }
 
 func TestParseToken(t *testing.T) {
-	InitCnf()
+	//InitCnf()
 
 	token, err := GenerateToken(JwtPayload{
 		UserId:   1,
@@ -41,7 +41,7 @@ func TestParseToken(t *testing.T) {
 }
 
 func TestValidToken(t *testing.T) {
-	InitCnf()
+	//InitCnf()
 
 	token, err := GenerateToken(JwtPayload{
 		UserId:   1,
