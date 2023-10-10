@@ -6,5 +6,6 @@ import "github.com/gin-gonic/gin"
 func GetAllMiddleware() []gin.HandlerFunc {
 	return []gin.HandlerFunc{
 		registerAuthHandler(),
+		registerCorsHandler(),
 	}
 }
