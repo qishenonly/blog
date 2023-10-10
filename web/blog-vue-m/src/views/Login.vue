@@ -1,0 +1,298 @@
+<template>
+  <div class="login-container">
+    <div class="login-form">
+      <div class="form-header">
+        <h1>欢迎回来！</h1>
+        <p>登录到您的帐户</p>
+      </div>
+      <form @submit="login">
+        <div class="form-group">
+          <label for="username">用户名：</label>
+          <input type="text" id="username" v-model="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">密码：</label>
+          <div class="password-input">
+            <input type="password" id="password" v-model="password" required :type="showPassword ? 'text' : 'password'">
+            <button @click="toggleShowPassword">
+              <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="captcha-container">
+            <label for="code" style="margin-bottom: 2%;">验证码：</label>
+            <div class="cc" style="display: flex">
+              <input type="text" v-model="captchaInput" required>
+              <canvas ref="captchaCanvas" width="120" @click="generateCaptcha()"
+                      height="40" style="margin-left: 5%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <button type="submit">登录</button>
+      </form>
+      <p class="register-link">还没有帐户？<router-link to="/register">注册</router-link></p>
+      <div class="social-login">
+        <p>或使用以下方式登录：</p>
+        <div class="social-icons">
+          <button @click="loginWithGoogle"><i class="fab fa-google"></i> 使用 Google 账户</button>
+          <button @click="loginWithFacebook"><i class="fab fa-facebook"></i> 使用 Facebook 账户</button>
+        </div>
+      </div>
+    </div>
+    <div class="login-image">
+      <!-- 放置登录页面的图片 -->
+      <!--      <img src="/path/to/login-image.jpg" alt="登录图片">-->
+    </div>
+  </div>
+</template>
+
+
+<script>
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+      showPassword: false,
+      captcha: '',
+      captchaInput: '',
+    };
+  },
+  mounted() {
+    this.generateCaptcha();
+  },
+  methods: {
+    login(event) {
+      event.preventDefault();
+      // 在这里处理登录逻辑，可以向后端发送登录请求
+      // 使用 this.username、this.password 和 this.captcha 获取用户输入
+      // 如果登录成功，可以跳转到其他页面或执行其他操作
+    },
+    loginWithGoogle() {
+      // 处理使用 Google 登录的逻辑
+    },
+    loginWithFacebook() {
+      // 处理使用 Facebook 登录的逻辑
+    },
+    toggleShowPassword() {
+      this.showPassword = !this.showPassword;
+    },
+    generateCaptcha() {
+      const canvas = this.$refs.captchaCanvas;
+      const ctx = canvas.getContext('2d');
+
+      // 随机生成验证码文字
+      const captchaText = this.generateRandomText();
+
+      // 设置字体样式
+      ctx.font = '40px Arial';
+
+      // 绘制背景色
+      ctx.fillStyle = '#f0f0f0';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 绘制验证码文字
+      ctx.fillStyle = this.getRandomColor();
+      ctx.fillText(captchaText, 15, 32);
+
+      // 添加干扰线
+      this.drawRandomLines(ctx);
+
+      // 添加干扰点
+      this.drawRandomDots(ctx);
+    },
+    generateRandomText() {
+      // 生成随机的验证码文字
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let captchaText = '';
+
+      for (let i = 0; i < 4; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        captchaText += characters.charAt(randomIndex);
+      }
+
+      return captchaText;
+    },
+    getRandomColor() {
+      // 生成随机的颜色
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+
+      return color;
+    },
+    drawRandomLines(ctx) {
+      // 绘制随机干扰线
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * 200, Math.random() * 80);
+        ctx.lineTo(Math.random() * 200, Math.random() * 80);
+        ctx.strokeStyle = this.getRandomColor();
+        ctx.stroke();
+      }
+    },
+    drawRandomDots(ctx) {
+      // 绘制随机干扰点
+      for (let i = 0; i < 50; i++) {
+        ctx.beginPath();
+        ctx.arc(Math.random() * 200, Math.random() * 80, 2, 0, Math.PI * 2);
+        ctx.fillStyle = this.getRandomColor();
+        ctx.fill();
+      }
+    },
+    refreshCaptcha() {
+      // 刷新验证码
+      this.generateCaptcha();
+      this.captchaInput = '';
+    },
+  },
+};
+</script>
+
+
+<style scoped>
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.login-form {
+  background-color: #ffffff;
+  padding: 40px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 400px;
+  text-align: center;
+}
+
+.form-header {
+  margin-bottom: 20px;
+}
+
+.form-header h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.form-header p {
+  color: #888;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #007bff;
+}
+
+.social-login {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-login p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.social-icons button {
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  margin: 0 10px;
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.3s;
+}
+
+.social-icons button:hover {
+  color: #0056b3;
+}
+
+.password-input {
+  position: relative;
+}
+
+.password-input input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  padding-right: 40px;
+}
+
+.password-input i {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.captcha-input {
+  display: flex;
+  align-items: center;
+}
+
+.captcha-input input[type="text"] {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+}
+
+.captcha-input .captcha-image {
+  margin-left: 10px;
+  cursor: pointer;
+  width: 120px; /* 调整验证码图片的大小 */
+  height: 40px; /* 调整验证码图片的大小 */
+}
+</style>
