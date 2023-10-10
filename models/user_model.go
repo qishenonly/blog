@@ -1,6 +1,10 @@
 package models
 
-import _type "blog/models/type"
+import (
+	_type "blog/models/type"
+	"blog/utils"
+	"gorm.io/gorm"
+)
 
 // UserModel 是一个 UserModel 类型的结构体，用来映射数据库中的 users 表
 type UserModel struct {
@@ -36,6 +40,15 @@ type UserModel struct {
 	// 注册来源
 	RegisterSource _type.RegisterSource `gorm:"type:varchar(20);not null;default:1;comment:'注册来源'" json:"RegisterSource"`
 
+	// 激活令牌
+	ActivationToken string `gorm:"type:varchar(100);not null;default:'';comment:'激活令牌'" json:"activation_token"`
+
+	// 激活令牌是否已经被激活
+	Activated bool `gorm:"not null;default:false;comment:'激活令牌是否已经被激活'" json:"activated"`
+
+	// 激活时间
+	EmailVerifiedAt int64 `gorm:"not null;default:0;comment:'激活时间'" json:"email_verified_at"`
+
 	// 地址
 	Address string `gorm:"type:varchar(100);not null;default:'';comment:'地址'" json:"address"`
 
@@ -62,4 +75,21 @@ type UserModel struct {
 
 	// 粉丝列表
 	FansUsers []UserModel `gorm:"many2many:user_fans_user;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"fans_users"`
+}
+
+func (u *UserModel) BeforeCreate(tx *gorm.DB) (err error) {
+	u.ActivationToken = utils.Rand(20)
+	return
+}
+
+func (u *UserModel) AfterCreate(tx *gorm.DB) (err error) {
+	tokendata := utils.VerifyTokenData{
+		Token: u.ActivationToken,
+		Email: u.Email,
+	}
+	err = utils.SendWithTemplate("confirm_email", tokendata, u.Email, "激活帐号！")
+	if err != nil {
+		return err
+	}
+	return
 }

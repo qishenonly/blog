@@ -34,7 +34,7 @@ type ArticleModel struct {
 	Category string `gorm:"type:varchar(20);not null;default:'';comment:'分类（标签）'" json:"category"`
 
 	// 文章作者
-	Author UserModel `gorm:"foreignkey:ID;association_foreignkey:ID;" json:"author"`
+	Author UserModel `gorm:"foreignkey:AuthorID;association_foreignkey:ID;" json:"author"`
 
 	// 作者 ID
 	AuthorID uint `gorm:"not null;default:0;comment:'作者 ID'" json:"author_id"`
