@@ -82,7 +82,7 @@ func NewGatewayTimeoutResponse(c *gin.Context) {
 	NewResponse(504, "gateway timeout", nil, c)
 }
 
-// NewCodeResponse 返回自定义Code响应
+// NewCodeResponse 返回自定义Code响应(验证码)
 func NewCodeResponse(code string, msg string, c *gin.Context) {
 	NewResponse(200, msg, code, c)
 }

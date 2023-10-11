@@ -6,6 +6,52 @@ info:
   title: Gin-Blog API 文档
   version: "0.1"
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: 登录
+      parameters:
+      - description: 邮箱
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 验证码
+        in: formData
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"登录成功"}'
+          schema:
+            type: string
+      summary: 登录
+      tags:
+      - Auth
+  /auth/login/code:
+    get:
+      consumes:
+      - application/json
+      description: 登录验证码
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"登录验证码"}'
+          schema:
+            type: string
+      summary: 登录验证码
+      tags:
+      - Auth
   /auth/register:
     post:
       consumes:
