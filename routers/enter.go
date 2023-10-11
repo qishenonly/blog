@@ -4,6 +4,8 @@ import (
 	"blog/global"
 	"blog/middlewares"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type RouterGroup struct {
@@ -16,6 +18,7 @@ func InitRouter() *gin.Engine {
 
 	// 初始化路由
 	router := gin.Default()
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	for _, handlerFunc := range middlewares.GetAllMiddleware() {
 		router.Use(handlerFunc)
 	}

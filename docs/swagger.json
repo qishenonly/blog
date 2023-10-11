@@ -1,0 +1,128 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Gin-Blog API 文档",
+        "title": "Gin-Blog API 文档",
+        "contact": {},
+        "version": "0.1"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "description": "注册",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "注册",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "验证码",
+                        "name": "code",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register/code": {
+            "get": {
+                "description": "注册验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "注册验证码",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册验证码！请在5分钟内使用！\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/verify/{token}/active/{email}": {
+            "get": {
+                "description": "激活账号",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "激活账号",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "激活码",
+                        "name": "token",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"激活成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

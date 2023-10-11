@@ -1,0 +1,86 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact: {}
+  description: Gin-Blog API 文档
+  title: Gin-Blog API 文档
+  version: "0.1"
+paths:
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: 注册
+      parameters:
+      - description: 用户名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 邮箱
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: 验证码
+        in: formData
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"注册成功"}'
+          schema:
+            type: string
+      summary: 注册
+      tags:
+      - Auth
+  /auth/register/code:
+    get:
+      consumes:
+      - application/json
+      description: 注册验证码
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"注册验证码！请在5分钟内使用！"}'
+          schema:
+            type: string
+      summary: 注册验证码
+      tags:
+      - Auth
+  /auth/verify/{token}/active/{email}:
+    get:
+      consumes:
+      - application/json
+      description: 激活账号
+      parameters:
+      - description: 激活码
+        in: path
+        name: token
+        required: true
+        type: string
+      - description: 邮箱
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"激活成功"}'
+          schema:
+            type: string
+      summary: 激活账号
+      tags:
+      - Auth
+swagger: "2.0"

@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register godoc
+// @Summary 注册
+// @Description 注册
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param username formData string true "用户名"
+// @Param password formData string true "密码"
+// @Param email formData string true "邮箱"
+// @Param code formData string true "验证码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
+// @Router /auth/register [post]
 func (ra *AuthApi) Register(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -72,6 +84,14 @@ func (ra *AuthApi) Register(c *gin.Context) {
 
 }
 
+// RegisterCode godoc
+// @Summary 注册验证码
+// @Description 注册验证码
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册验证码！请在5分钟内使用！"}"
+// @Router /auth/register/code [get]
 func (ra *AuthApi) RegisterCode(c *gin.Context) {
 	code := utils.RandCode(4)
 	registerCode := []byte("register_code_" + code)
