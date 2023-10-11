@@ -17,7 +17,7 @@ type UserModel struct {
 	Username string `gorm:"type:varchar(20);not null;default:'';comment:'用户名'" json:"username"`
 
 	// 密码
-	Password string `gorm:"type:varchar(20);not null;default:'';comment:'密码'" json:"password"`
+	Password string `gorm:"type:varchar(100);not null;default:'';comment:'密码'" json:"password"`
 
 	// 头像
 	Avatar string `gorm:"type:varchar(100);not null;default:'';comment:'头像'" json:"avatar"`
@@ -78,7 +78,7 @@ type UserModel struct {
 }
 
 func (u *UserModel) BeforeCreate(tx *gorm.DB) (err error) {
-	u.ActivationToken = utils.RandString(20)
+	u.ActivationToken = utils.RandString(50)
 	return
 }
 
