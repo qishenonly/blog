@@ -53,6 +53,16 @@ func (va *AuthApi) Verify(c *gin.Context) {
 	utils.NewSuccessResponse("激活成功", c)
 }
 
+// VerifyResetPwd godoc
+// @Summary 激活重置密码token
+// @Description 激活重置密码token
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param token path string true "激活码"
+// @Param email path string true "邮箱"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"激活成功"}"
+// @Router /auth/verify/{token}/reset_pwd/{email} [get]
 func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
 	email := c.Param("email")
 

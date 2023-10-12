@@ -20,7 +20,9 @@ type Login struct {
 // @Tags Auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param email formData string true "email"
+// @Param email body string true "email"
+// @Param password body string true "password"
+// @Param code body string true "code"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登录成功"}"
 // @Router /auth/login [post]
 func (la *AuthApi) Login(c *gin.Context) {

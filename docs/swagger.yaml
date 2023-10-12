@@ -6,27 +6,45 @@ info:
   title: Gin-Blog API 文档
   version: "0.1"
 paths:
+  /auth/github:
+    get:
+      consumes:
+      - application/json
+      description: Github授权
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: '{"success":true,"data":{},"msg":"授权成功"}'
+          schema:
+            type: string
+      summary: Github授权
+      tags:
+      - Auth
   /auth/login:
     post:
       consumes:
       - application/json
       description: 登录
       parameters:
-      - description: 邮箱
-        in: formData
+      - description: email
+        in: body
         name: email
         required: true
-        type: string
-      - description: 密码
-        in: formData
+        schema:
+          type: string
+      - description: password
+        in: body
         name: password
         required: true
-        type: string
-      - description: 验证码
-        in: formData
+        schema:
+          type: string
+      - description: code
+        in: body
         name: code
         required: true
-        type: string
+        schema:
+          type: string
       produces:
       - application/json
       responses:
@@ -58,26 +76,30 @@ paths:
       - application/json
       description: 注册
       parameters:
-      - description: 用户名
-        in: formData
+      - description: username
+        in: body
         name: username
         required: true
-        type: string
-      - description: 密码
-        in: formData
+        schema:
+          type: string
+      - description: password
+        in: body
         name: password
         required: true
-        type: string
-      - description: 邮箱
-        in: formData
+        schema:
+          type: string
+      - description: email
+        in: body
         name: email
         required: true
-        type: string
-      - description: 验证码
-        in: formData
+        schema:
+          type: string
+      - description: code
+        in: body
         name: code
         required: true
-        type: string
+        schema:
+          type: string
       produces:
       - application/json
       responses:
@@ -101,6 +123,54 @@ paths:
           schema:
             type: string
       summary: 注册验证码
+      tags:
+      - Auth
+  /auth/reset_pwd/{email}:
+    post:
+      consumes:
+      - application/json
+      description: 重置密码
+      parameters:
+      - description: email
+        in: path
+        name: email
+        required: true
+        type: string
+      - description: new_password
+        in: body
+        name: new_password
+        required: true
+        schema:
+          type: string
+      - description: code
+        in: body
+        name: code
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"重置密码成功"}'
+          schema:
+            type: string
+      summary: 重置密码
+      tags:
+      - Auth
+  /auth/reset_pwd_code:
+    get:
+      consumes:
+      - application/json
+      description: 重置密码验证码
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"重置密码验证码获取成功"}'
+          schema:
+            type: string
+      summary: 重置密码验证码
       tags:
       - Auth
   /auth/verify/{token}/active/{email}:
@@ -127,6 +197,32 @@ paths:
           schema:
             type: string
       summary: 激活账号
+      tags:
+      - Auth
+  /auth/verify/{token}/reset_pwd/{email}:
+    get:
+      consumes:
+      - application/json
+      description: 激活重置密码token
+      parameters:
+      - description: 激活码
+        in: path
+        name: token
+        required: true
+        type: string
+      - description: 邮箱
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"激活成功"}'
+          schema:
+            type: string
+      summary: 激活重置密码token
       tags:
       - Auth
 swagger: "2.0"

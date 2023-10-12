@@ -21,7 +21,10 @@ type Register struct {
 // @Tags Auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param data body Register true "data"
+// @Param username body string true "username"
+// @Param password body string true "password"
+// @Param email body string true "email"
+// @Param code body string true "code"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /auth/register [post]
 func (ra *AuthApi) Register(c *gin.Context) {

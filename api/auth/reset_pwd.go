@@ -18,6 +18,17 @@ type ResetTokenActivatedData struct {
 	Activated bool   `json:"activated"`
 }
 
+// ResetPwd godoc
+// @Summary 重置密码
+// @Description 重置密码
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param email path string true "email"
+// @Param new_password body string true "new_password"
+// @Param code body string true "code"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"重置密码成功"}"
+// @Router /auth/reset_pwd/{email} [post]
 func (ra *AuthApi) ResetPwd(c *gin.Context) {
 	email := c.Param("email")
 	if email == "" {
@@ -139,6 +150,14 @@ func (ra *AuthApi) ResetPwd(c *gin.Context) {
 
 }
 
+// ResetPwdCode godoc
+// @Summary 重置密码验证码
+// @Description 重置密码验证码
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"重置密码验证码获取成功"}"
+// @Router /auth/reset_pwd_code [get]
 func (ra *AuthApi) ResetPwdCode(c *gin.Context) {
 	code := utils.RandCode(4)
 	resetPwdCode := []byte("reset_pwd_code_" + code)
