@@ -5,6 +5,7 @@ import (
 	"blog/models"
 	"blog/utils"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 // Verify godoc
@@ -44,6 +45,43 @@ func (va *AuthApi) Verify(c *gin.Context) {
 	// 激活用户
 	err = global.DB.Model(&user).Update("activated", true).Error
 	if err != nil {
+		global.Logger.Error("激活失败: ", err)
+		utils.NewFailResponse("激活失败！", c)
+		return
+	}
+
+	utils.NewSuccessResponse("激活成功", c)
+}
+
+func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
+	email := c.Param("email")
+
+	// 判断邮箱是否存在
+	var user models.UserModel
+	if err := global.DB.Where("email = ?", email).First(&user).Error; err != nil {
+		utils.NewFailResponse("该用户不存在！", c)
+		return
+	}
+
+	// 判断token是否过期
+	currentTime := time.Now().UnixNano()
+	expireTime := user.ResetPasswordTokenExpiredAt
+	if currentTime > expireTime {
+		utils.NewFailResponse("该链接已失效！", c)
+		return
+	}
+
+	// 判断token是否正确
+	// 判断token是否已激活
+	token := c.Param("token")
+	if token != user.ResetPasswordToken || user.ResetPasswordTokenUsed {
+		utils.NewFailResponse("该链接已失效！", c)
+		return
+	}
+
+	// 激活重置密码token
+	if err := global.DB.Model(&user).
+		Update("reset_password_token_used", true).Error; err != nil {
 		global.Logger.Error("激活失败: ", err)
 		utils.NewFailResponse("激活失败！", c)
 		return

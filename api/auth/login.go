@@ -64,7 +64,17 @@ func (la *AuthApi) Login(c *gin.Context) {
 
 	// 判断用户是否已激活
 	if !user.Activated {
-		utils.NewFailResponse("该用户未激活！", c)
+		tokendata := utils.VerifyTokenData{
+			Token: user.ActivationToken,
+			Email: user.Email,
+		}
+		if err = utils.SendWithTemplate("confirm_email", tokendata,
+			user.Email, "用户 "+user.Username+" 激活帐号操作！"); err != nil {
+			global.Logger.Error("发送邮件失败: ", err)
+			utils.NewFailResponse("发送邮件失败！", c)
+			return
+		}
+		utils.NewFailResponse("该用户未激活！激活链接邮件已发送！请注意查收！", c)
 		return
 	}
 

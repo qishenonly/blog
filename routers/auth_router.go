@@ -21,6 +21,15 @@ func (router RouterGroup) InitAuthRouter() {
 	// 登录验证码
 	router.GET("/auth/login/code", authApi.LoginCode)
 
+	// 重置密码
+	router.POST("/auth/reset_pwd/:email", authApi.ResetPwd)
+
+	// 重置密码验证码
+	router.GET("/auth/reset_pwd/code", authApi.ResetPwdCode)
+
+	// 重置密码激活
+	router.GET("/auth/verify/reset_pwd/:token/active/:email", authApi.VerifyResetPwd)
+
 	// 第三方登录
 	router.GET("/auth/github", authApi.AuthGithub)
 	router.GET("/auth/github_callback", authApi.AuthGithubCallback)

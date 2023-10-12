@@ -50,6 +50,15 @@ type UserModel struct {
 	// 激活时间
 	EmailVerifiedAt int64 `gorm:"not null;default:0;comment:'激活时间'" json:"email_verified_at"`
 
+	// 重置密码令牌
+	ResetPasswordToken string `gorm:"type:varchar(100);not null;default:'';comment:'重置密码令牌'" json:"reset_password_token"`
+
+	// 重置密码令牌过期时间
+	ResetPasswordTokenExpiredAt int64 `gorm:"not null;default:0;comment:'重置密码令牌过期时间'" json:"reset_password_token_expired_at"`
+
+	// 重置密码令牌是否已经被使用
+	ResetPasswordTokenUsed bool `gorm:"not null;default:false;comment:'重置密码令牌是否已经被使用'" json:"reset_password_token_used"`
+
 	// 地址
 	Address string `gorm:"type:varchar(100);not null;default:'';comment:'地址'" json:"address"`
 
@@ -88,7 +97,7 @@ func (u *UserModel) AfterCreate(tx *gorm.DB) (err error) {
 		Token: u.ActivationToken,
 		Email: u.Email,
 	}
-	err = utils.SendWithTemplate("confirm_email", tokendata, u.Email, "激活帐号！")
+	err = utils.SendWithTemplate("confirm_email", tokendata, u.Email, "用户 "+u.Username+" 激活帐号操作！")
 	if err != nil {
 		global.DB.Delete(u)
 		return err

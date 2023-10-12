@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>注册确认链接</title>
+    <title>重置密码链接</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +27,7 @@
             font-size: 18px;
             margin: 20px 0;
         }
-        .bt {
+        .bn {
             display: inline-block;
             background-color: #007bff;
             color: #fff;
@@ -37,7 +37,7 @@
             border-radius: 5px;
             margin-top: 20px;
         }
-        .bt:hover {
+        .bn:hover {
             background-color: #0056b3;
         }
         .footer {
@@ -49,25 +49,25 @@
 </head>
 <body>
 <div class="container">
-    <h1>感谢您在 Blog App 网站进行注册！</h1>
+    <h1>重置密码</h1>
 
     <p>
-        您已成功创建了您的新帐户。请点击下面的按钮来验证您的电子邮件地址以完成注册：
+        您收到这封邮件是因为您或其他人请求了重置密码。请点击下面的链接来重置您的密码：
     </p>
     <p>
-        <a class="bt" href="http://localhost:8080/api/auth/verify/{{ .Token }}/active/{{ .Email }}">
-            点击此处验证
+        <a class="bn" href="http://localhost:8080/api/auth/verify/reset_pwd/{{ .Token }}/active/{{ .Email }}">
+            点击此处重置密码
         </a>
     </p>
 
     <p>
-        如果您无法点击上述链接，请将以下链接复制并粘贴到您的浏览器地址栏中：
+        如果您无法点击上述链接，请在24小时内将以下链接复制并粘贴到您的浏览器地址栏中：
         <br>
-        <a>http://localhost:8080/api/auth/verify/{{ .Token }}/active/{{ .Email }}</a>
+        <a>http://localhost:8080/api/auth/verify/reset_pwd/{{ .Token }}/active/{{ .Email }}</a>
     </p>
 
     <p>
-        如果这不是您本人的操作，请忽略此邮件。
+        如果您未请求密码重置，请忽略此邮件。
     </p>
 </div>
 <div class="footer">
