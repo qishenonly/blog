@@ -20,4 +20,8 @@ func (router RouterGroup) InitAuthRouter() {
 
 	// 登录验证码
 	router.GET("/auth/login/code", authApi.LoginCode)
+
+	// 第三方登录
+	router.GET("/auth/github", authApi.AuthGithub)
+	router.GET("/auth/github_callback", authApi.AuthGithubCallback)
 }

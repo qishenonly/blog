@@ -8,48 +8,55 @@ import (
 	"strconv"
 )
 
+type Login struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Code     string `json:"code" binding:"required"`
+}
+
 // Login godoc
 // @Summary 登录
 // @Description 登录
 // @Tags Auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param email formData string true "邮箱"
-// @Param password formData string true "密码"
-// @Param code formData string true "验证码"
+// @Param email formData string true "email"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登录成功"}"
 // @Router /auth/login [post]
 func (la *AuthApi) Login(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
-	code := c.PostForm("code")
-	if email == "" || password == "" || code == "" {
+	var request Login
+	if err := c.ShouldBind(&request); err != nil {
+		global.Logger.Error("获取参数失败", err)
+		utils.NewFailResponse("获取参数失败", c)
+		return
+	}
+	if request.Email == "" || request.Password == "" || request.Code == "" {
 		utils.NewFailResponse("参数错误", c)
 		return
 	}
 
 	// 判断验证码是否正确
-	loginCode, err := global.Cache.Get([]byte("login_code_" + code))
+	loginCode, err := global.Cache.Get([]byte("login_code_" + request.Code))
 	if err != nil {
 		global.Logger.Error("获取验证码失败: ", err)
 		utils.NewFailResponse("验证码错误！请重试！", c)
 		return
 	}
-	if string(loginCode) != code {
+	if string(loginCode) != request.Code {
 		utils.NewFailResponse("验证码错误！请重试！", c)
 		return
 	}
 
 	// 判断邮箱是否存在
 	var user models.UserModel
-	err = global.DB.Where("email = ?", email).First(&user).Error
+	err = global.DB.Where("email = ?", request.Email).First(&user).Error
 	if err != nil {
 		utils.NewFailResponse("该用户不存在！", c)
 		return
 	}
 
 	// 判断密码是否正确
-	err = utils.ComparePasswords(user.Password, password)
+	err = utils.ComparePasswords(user.Password, request.Password)
 	if err != nil {
 		utils.NewFailResponse("密码错误！", c)
 		return

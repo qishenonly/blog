@@ -7,8 +7,8 @@
       </div>
       <form @submit="login">
         <div class="form-group">
-          <label for="username">用户名：</label>
-          <input type="text" id="username" v-model="username" required>
+          <label for="email">邮箱：</label>
+          <input type="text" id="email" v-model="email" required>
         </div>
         <div class="form-group">
           <label for="password">密码：</label>
@@ -34,9 +34,11 @@
       <p class="register-link">还没有帐户？<router-link to="/register">注册</router-link></p>
       <div class="social-login">
         <p>或使用以下方式登录：</p>
-        <div class="social-icons">
-          <button @click="loginWithGoogle"><i class="fab fa-google"></i> 使用 Google 账户</button>
-          <button @click="loginWithFacebook"><i class="fab fa-facebook"></i> 使用 Facebook 账户</button>
+        <div class="icons">
+          <img src="../../public/github.png" alt="" class="img_github"
+               @click="open('http://localhost:8080/api/auth/github')">
+          <img src="../../public/gitee.png" alt="" class="img_gitee"
+               >
         </div>
       </div>
     </div>
@@ -49,18 +51,21 @@
 
 
 <script>
+import {fetchLogin, fetchLoginCode, fetchRegister} from '../api'
 export default {
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       showPassword: false,
       captcha: '',
       captchaInput: '',
+      loginCode: '',
     };
   },
   mounted() {
     this.generateCaptcha();
+    this.getLoginCode();
   },
   methods: {
     login(event) {
@@ -68,22 +73,48 @@ export default {
       // 在这里处理登录逻辑，可以向后端发送登录请求
       // 使用 this.username、this.password 和 this.captcha 获取用户输入
       // 如果登录成功，可以跳转到其他页面或执行其他操作
+      let data = {
+        email: this.email,
+        password: this.password,
+        code: this.captchaInput
+      }
+
+      fetchLogin(data)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
     },
-    loginWithGoogle() {
-      // 处理使用 Google 登录的逻辑
+
+    async getLoginCode() {
+      await fetchLoginCode().then(res => {
+        this.loginCode = res.data.data || []
+      }).catch(err => {
+        console.log(err)
+      })
     },
-    loginWithFacebook() {
-      // 处理使用 Facebook 登录的逻辑
-    },
+
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
     },
-    generateCaptcha() {
+
+    open(url) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.click()
+    },
+
+    async generateCaptcha() {
       const canvas = this.$refs.captchaCanvas;
       const ctx = canvas.getContext('2d');
 
+      await this.getLoginCode()
       // 随机生成验证码文字
-      const captchaText = this.generateRandomText();
+      const captchaText = this.loginCode;
 
       // 设置字体样式
       ctx.font = '40px Arial';
@@ -294,5 +325,18 @@ button[type="submit"]:hover {
   cursor: pointer;
   width: 120px; /* 调整验证码图片的大小 */
   height: 40px; /* 调整验证码图片的大小 */
+}
+
+.img_github {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.img_gitee {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
 }
 </style>

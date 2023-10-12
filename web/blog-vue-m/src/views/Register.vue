@@ -11,6 +11,10 @@
           <input type="text" id="username" v-model="username" required>
         </div>
         <div class="form-group">
+          <label for="email">邮箱：</label>
+          <input type="text" id="email" v-model="email" required>
+        </div>
+        <div class="form-group">
           <label for="password">密码：</label>
           <input type="password" id="password" v-model="password" required>
         </div>
@@ -34,12 +38,13 @@
 </template>
 
 <script>
-import {fetchFocus, fetchRegister, fetchRegisterCode} from '../api'
+import {fetchRegister, fetchRegisterCode} from '../api'
 export default {
   data() {
     return {
       username: '',
       password: '',
+      email: '',
       confirmPassword: '',
       captcha: '',
       captchaInput: '',
@@ -47,33 +52,50 @@ export default {
     };
   },
   mounted() {
-    this.generateCaptcha();
     this.getRegisterCode();
+    this.generateCaptcha();
   },
   methods: {
     register(event) {
       event.preventDefault();
       // 在这里处理注册逻辑，包括用户名、密码、确认密码和验证码的验证
       // 如果注册成功，可以跳转到登录页面或执行其他操作
-      fetchRegister();
+
+      let data = {
+        username : this.username,
+        password : this.password,
+        email : this.email,
+        code : this.captchaInput
+      }
+
+      fetchRegister(data)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
     },
 
-    getRegisterCode() {
-      fetchRegisterCode().then(res => {
+    async getRegisterCode() {
+      await fetchRegisterCode().then(res => {
         this.registerCode = res.data.data || []
       }).catch(err => {
         console.log(err)
       })
     },
 
-    generateCaptcha() {
+    async generateCaptcha() {
+      await this.getRegisterCode();
+
       const canvas = this.$refs.captchaCanvas;
       const ctx = canvas.getContext('2d');
 
-      this.getRegisterCode();
 
       // 随机生成验证码文字
       const captchaText = this.registerCode;
+
 
       // 设置字体样式
       ctx.font = '40px Arial';

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"blog/global"
 	_type "blog/models/type"
 	"blog/utils"
 	"gorm.io/gorm"
@@ -89,6 +90,7 @@ func (u *UserModel) AfterCreate(tx *gorm.DB) (err error) {
 	}
 	err = utils.SendWithTemplate("confirm_email", tokendata, u.Email, "激活帐号！")
 	if err != nil {
+		global.DB.Delete(u)
 		return err
 	}
 	return

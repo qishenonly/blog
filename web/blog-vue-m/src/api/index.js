@@ -57,11 +57,11 @@ export function fetchComment() {
 }
 
 // 注册
-export function fetchRegister() {
+export function fetchRegister(data) {
     return request({
         url: '/auth/register',
         method: 'post',
-        params: {}
+        data: data
     })
 }
 
@@ -69,6 +69,23 @@ export function fetchRegister() {
 export function fetchRegisterCode() {
     return request({
         url: '/auth/register/code',
+        method: 'get',
+    })
+}
+
+// 登录
+export function fetchLogin(data) {
+    return request({
+        url: '/auth/login',
+        method: 'post',
+        data: data
+    })
+}
+
+// 登录验证码
+export function fetchLoginCode() {
+    return request({
+        url: '/auth/login/code',
         method: 'get',
     })
 }
