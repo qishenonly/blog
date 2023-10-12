@@ -90,3 +90,20 @@ export function fetchLoginCode() {
     })
 }
 
+// 重置密码
+export function fetchResetPwd(data) {
+    return request({
+        url: '/auth/reset_pwd',
+        method: 'post',
+        data: data
+    })
+}
+
+// 重置密码验证码
+export function fetchResetPwdCode() {
+    return request({
+        url: '/auth/reset_pwd/code',
+        method: 'get',
+    })
+}
+

@@ -32,6 +32,7 @@
         <button type="submit">登录</button>
       </form>
       <p class="register-link">还没有帐户？<router-link to="/register">注册</router-link></p>
+      <p class="register-link">忘记密码？<router-link to="/reset_pwd">重置</router-link></p>
       <div class="social-login">
         <p>或使用以下方式登录：</p>
         <div class="icons">
