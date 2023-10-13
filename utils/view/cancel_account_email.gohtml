@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>注销账户链接</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ff3333;
+            text-align: center;
+        }
+        p {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #ff3333;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #ff0000;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>注销账户</h1>
+
+    <p>
+        您正在注销您的账户，此操作将永久性地删除您的帐号信息。请确保您真的需要注销此帐号，因为这是不可逆的操作。
+    </p>
+    <p>
+        如果您确定要继续注销操作，请点击下面的链接以确认注销：
+    </p>
+    <p>
+        <a class="btn" href="http://localhost:8080/api/auth/verify/cancel_account/{{ .Token }}/active/{{ .Email }}">
+            点击此处注销账户
+        </a>
+    </p>
+
+    <p>
+        如果您无法点击上述链接，请在24小时内将以下链接复制并粘贴到您的浏览器地址栏中：
+        <br>
+        <a>http://localhost:8080/api/auth/verify/cancel_account/{{ .Token }}/active/{{ .Email }}</a>
+    </p>
+
+    <p>
+        如果您并未请求注销账户，请忽略此邮件。
+    </p>
+</div>
+<div class="footer">
+    &copy; 2023 Blog App
+</div>
+</body>
+</html>
