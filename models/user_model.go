@@ -5,6 +5,7 @@ import (
 	_type "blog/models/type"
 	"blog/utils"
 	"gorm.io/gorm"
+	"time"
 )
 
 // UserModel 是一个 UserModel 类型的结构体，用来映射数据库中的 users 表
@@ -47,8 +48,8 @@ type UserModel struct {
 	// 激活令牌是否已经被激活
 	Activated bool `gorm:"not null;default:false;comment:'激活令牌是否已经被激活'" json:"activated"`
 
-	// 激活时间
-	EmailVerifiedAt int64 `gorm:"not null;default:0;comment:'激活时间'" json:"email_verified_at"`
+	// 激活令牌过期时间
+	ActivationTokenExpiredAt int64 `gorm:"not null;default:0;comment:'激活令牌过期时间'" json:"activation_token_expired_at"`
 
 	// 重置密码令牌
 	ResetPasswordToken string `gorm:"type:varchar(100);not null;default:'';comment:'重置密码令牌'" json:"reset_password_token"`
@@ -89,6 +90,7 @@ type UserModel struct {
 
 func (u *UserModel) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ActivationToken = utils.RandString(50)
+	u.ActivationTokenExpiredAt = time.Now().Add(time.Hour * 24).UnixNano()
 	return
 }
 

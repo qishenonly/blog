@@ -34,6 +34,17 @@ func (va *AuthApi) Verify(c *gin.Context) {
 		return
 	}
 
+	// 判断token是否过期
+	currentTime := time.Now().UnixNano()
+	expireTime := user.ActivationTokenExpiredAt
+	if currentTime > expireTime {
+		if err := WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
+		return
+	}
+
 	// 判断token是否正确
 	token := c.Param("token")
 	if token != user.ActivationToken {
