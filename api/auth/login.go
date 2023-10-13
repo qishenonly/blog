@@ -93,6 +93,12 @@ func (la *AuthApi) Login(c *gin.Context) {
 		return
 	}
 
+	// ip
+	if err = global.DB.Model(&user).Update("ip", c.ClientIP()).Error; err != nil {
+		global.Logger.Error("更新用户ip失败: ", err)
+		return
+	}
+
 	// Cache
 	err = global.Cache.Put([]byte("token_"+strconv.Itoa(int(user.ID))), []byte(token))
 	if err != nil {
