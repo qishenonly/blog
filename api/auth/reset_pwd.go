@@ -141,7 +141,7 @@ func (ra *AuthApi) ResetPwd(c *gin.Context) {
 
 	// 删除验证码
 	if err = global.Cache.Delete([]byte("reset_pwd_code_" + request.Code)); err != nil {
-		global.Logger.Error("重置密码失败: ", err)
+		global.Logger.Error("重置密码验证码删除失败: ", err)
 		utils.NewSuccessResponse("重置密码成功", c)
 		return
 	}

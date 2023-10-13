@@ -90,6 +90,11 @@ func (ra *AuthApi) Register(c *gin.Context) {
 		return
 	}
 
+	// 删除验证码
+	if err = global.Cache.Delete([]byte("register_code_" + request.Code)); err != nil {
+		global.Logger.Error("注册验证码删除失败: ", err)
+	}
+
 	utils.NewSuccessResponse("注册成功", c)
 
 }

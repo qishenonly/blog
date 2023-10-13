@@ -107,6 +107,11 @@ func (la *AuthApi) Login(c *gin.Context) {
 		return
 	}
 
+	// 删除验证码
+	if err = global.Cache.Delete([]byte("login_code_" + request.Code)); err != nil {
+		global.Logger.Error("登录验证码删除失败: ", err)
+	}
+
 	// 构建返回数据
 	response := struct {
 		Token string `json:"token"`
