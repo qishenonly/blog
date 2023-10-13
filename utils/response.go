@@ -86,3 +86,8 @@ func NewGatewayTimeoutResponse(c *gin.Context) {
 func NewCodeResponse(code string, msg string, c *gin.Context) {
 	NewResponse(200, msg, code, c)
 }
+
+// NewRedirectResponse 返回重定向响应
+func NewRedirectResponse(code int, location string, c *gin.Context) {
+	c.Redirect(code, location)
+}

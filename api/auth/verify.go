@@ -4,7 +4,9 @@ import (
 	"blog/global"
 	"blog/models"
 	"blog/utils"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"time"
 )
 
@@ -25,32 +27,47 @@ func (va *AuthApi) Verify(c *gin.Context) {
 	var user models.UserModel
 	err := global.DB.Where("email = ?", email).First(&user).Error
 	if err != nil {
-		utils.NewFailResponse("该用户不存在！", c)
+		if err = WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
 	// 判断token是否正确
 	token := c.Param("token")
 	if token != user.ActivationToken {
-		utils.NewFailResponse("激活失败！激活码不正确！", c)
+		if err = WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
+		//utils.NewFailResponse("该链接已失效！", c)
 		return
 	}
 
 	// 判断用户是否已激活
 	if user.Activated && token == user.ActivationToken {
-		utils.NewFailResponse("该用户已激活！", c)
+		if err = WriteActiveStatusToCache(email, 310, "该用户已激活！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
 	// 激活用户
 	err = global.DB.Model(&user).Update("activated", true).Error
 	if err != nil {
-		global.Logger.Error("激活失败: ", err)
-		utils.NewFailResponse("激活失败！", c)
+		if err = WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
-	utils.NewSuccessResponse("激活成功", c)
+	if err = WriteActiveStatusToCache(email, 312, "激活成功！！", "success",
+		http.StatusFound, "http://localhost:8888/", c); err != nil {
+		return
+	}
 }
 
 // VerifyResetPwd godoc
@@ -69,7 +86,10 @@ func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
 	// 判断邮箱是否存在
 	var user models.UserModel
 	if err := global.DB.Where("email = ?", email).First(&user).Error; err != nil {
-		utils.NewFailResponse("该用户不存在！", c)
+		if err = WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
@@ -77,7 +97,10 @@ func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
 	currentTime := time.Now().UnixNano()
 	expireTime := user.ResetPasswordTokenExpiredAt
 	if currentTime > expireTime {
-		utils.NewFailResponse("该链接已失效！", c)
+		if err := WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
@@ -85,7 +108,10 @@ func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
 	// 判断token是否已激活
 	token := c.Param("token")
 	if token != user.ResetPasswordToken || user.ResetPasswordTokenUsed {
-		utils.NewFailResponse("该链接已失效！", c)
+		if err := WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
@@ -93,9 +119,46 @@ func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
 	if err := global.DB.Model(&user).
 		Update("reset_password_token_used", true).Error; err != nil {
 		global.Logger.Error("激活失败: ", err)
-		utils.NewFailResponse("激活失败！", c)
+		if err = WriteActiveStatusToCache(email, 310, "该链接已失效！", "error",
+			http.StatusFound, "http://localhost:8888/", c); err != nil {
+			return
+		}
 		return
 	}
 
-	utils.NewSuccessResponse("激活成功", c)
+	if err := WriteActiveStatusToCache(email, 312, "激活成功！！", "success",
+		http.StatusFound, "http://localhost:8888/", c); err != nil {
+		return
+	}
+}
+
+type ActiveMsg struct {
+	Msg  string `json:"msg"`
+	Code int    `json:"code"`
+}
+
+// WriteActiveStatusToCache 写入激活状态到cache
+// email: 邮箱
+// code: 返回状态码
+// msg: 返回信息
+// status: 激活状态
+// HttpStatusFound: 重定向状态码
+// location: 重定向地址
+// c: gin.Context
+func WriteActiveStatusToCache(email string, code int, msg string, status string,
+	HttpStatusFound int, location string, c *gin.Context) error {
+	activeMsg := ActiveMsg{
+		Msg:  msg,
+		Code: code,
+	}
+	jsonMsg, err := json.Marshal(activeMsg)
+	if err != nil {
+		return err
+	}
+	if err = global.Cache.Put([]byte("active_"+status+"_"+email), jsonMsg); err != nil {
+		global.Logger.Error("写入cache失败: ", err)
+		return err
+	}
+	utils.NewRedirectResponse(HttpStatusFound, location, c)
+	return nil
 }
