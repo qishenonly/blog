@@ -31,8 +31,11 @@
         </div>
         <button type="submit">登录</button>
       </form>
-      <p class="register-link">还没有帐户？<router-link to="/register">注册</router-link></p>
-      <p class="register-link">忘记密码？<router-link to="/reset_pwd">重置</router-link></p>
+      <p class="register-link">还没有帐户？<router-link to="/auth/register">注册</router-link></p>
+<!--      <p class="register-link">忘记密码？<router-link to="/reset_pwd">重置</router-link></p>-->
+      <p class="register-link">忘记密码？
+        <button class="reset_but" @click="toResetPwdPage">重置</button>
+      </p>
       <div class="social-login">
         <p>或使用以下方式登录：</p>
         <div class="icons">
@@ -52,7 +55,7 @@
 
 
 <script>
-import {fetchLogin, fetchLoginCode, fetchRegister} from '../api'
+import {fetchLogin, fetchLoginCode, fetchRegister, fetchResetPwd} from '../api'
 export default {
   data() {
     return {
@@ -74,6 +77,33 @@ export default {
       // 在这里处理登录逻辑，可以向后端发送登录请求
       // 使用 this.username、this.password 和 this.captcha 获取用户输入
       // 如果登录成功，可以跳转到其他页面或执行其他操作
+      if (this.email === '') {
+        this.$message({
+          message: '请输入邮箱',
+          type: 'warning'
+        });
+        return
+      } else if (this.password === '') {
+        this.$message({
+          message: '请输入密码',
+          type: 'warning'
+        });
+        return
+      } else if (this.captchaInput === '') {
+        this.$message({
+          message: '请输入验证码',
+          type: 'warning'
+        });
+        return
+      }
+
+      // 判断邮箱格式是否正确
+      const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if (!regEmail.test(this.email)) {
+        this.$message.warning('邮箱格式不正确！');
+        return;
+      }
+
       let data = {
         email: this.email,
         password: this.password,
@@ -81,9 +111,22 @@ export default {
       }
 
       fetchLogin(data)
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
+          .then(res => {
+            if (res.data.code === 400) {
+              this.$message({
+                message: res.data.data,
+                type: 'error'
+              });
+            } else {
+              localStorage.setItem('token', res.data.data.token);
+              this.$message({
+                message: '登录成功',
+                type: 'success'
+              });
+              this.$router.push({
+                name: 'home',
+              });
+            }
           })
           .catch(error => {
             console.error('Error:', error);
@@ -107,6 +150,52 @@ export default {
       a.href = url;
       a.target = '_blank';
       a.click()
+    },
+
+    toResetPwdPage() {
+      if (this.email === '') {
+        this.$message({
+          message: '请输入邮箱',
+          type: 'warning'
+        });
+        return
+      }
+
+      fetchResetPwd(this.email).then(res => {
+        console.log(res)
+        if (res.data.code === 400) {
+          this.$router.push({
+            name: 'reset_pwd',
+            params: {
+              // 将数据作为参数传递
+              showResetView: true,
+              email: this.email,
+            }
+          });
+        } else {
+          if (res.data.data.activated === false) {
+            this.$router.push({
+              name: 'reset_pwd',
+              params: {
+                // 将数据作为参数传递
+                showResetView: false,
+                email: this.email,
+              }
+            });
+          } else {
+            this.$router.push({
+              name: 'reset_pwd',
+              params: {
+                // 将数据作为参数传递
+                showResetView: true,
+                email: this.email,
+              }
+            });
+          }
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
 
     async generateCaptcha() {
@@ -339,5 +428,17 @@ button[type="submit"]:hover {
   width: 40px;
   height: 40px;
   margin-right: 10px;
+}
+
+.reset_but {
+/* 在你的CSS文件中定义一个样式类，例如.custom-button */
+  border: none;         /* 去掉边框 */
+  background: none;     /* 去掉背景颜色 */
+  padding: 0;           /* 去掉内边距 */
+  cursor: pointer;      /* 添加鼠标指针样式，让按钮看起来可以点击 */
+  /* 可以继续添加其他样式，如颜色、字体大小等 */
+  color: #007bff;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>

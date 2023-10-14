@@ -8,7 +8,8 @@ require('./Mock')
 import {parseTime} from './utils'
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css'	//样式
-
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.directive('highlight',function (el) {
   let blocks = el.querySelectorAll('pre code');
@@ -24,3 +25,5 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+Vue.use(ElementUI);

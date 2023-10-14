@@ -42,22 +42,23 @@ const routes = [
         meta: {title: '文章'}
     },
     {
-        path: '/login',
+        path: '/auth/login',
         name: 'login',
         component: () => import('../views/Login.vue'),
         meta: {title: '登录'}
     },
     {
-        path: '/register',
+        path: '/auth/register',
         name: 'register',
         component: () => import('../views/Register.vue'),
         meta: {title: '注册'}
     },
     {
-        path: '/reset_pwd',
+        path: '/auth/reset_pwd/:email',
         name: 'reset_pwd',
         component: () => import('../views/ResetPwd.vue'),
-        meta: {title: '重置密码'}
+        meta: {title: '重置密码'},
+        props: true,
     }
 ]
 
@@ -67,7 +68,7 @@ const router = new VueRouter({
     routes
 })
 router.beforeEach((to, from, next) => {
-    let title = 'Gblog'
+    let title = 'Blog'
     if (to.meta.params) {
         title = `${to.meta.title}:${to.params[to.meta.params] || ''} - ${title}`
     } else {

@@ -32,7 +32,7 @@
         </div>
         <button type="submit" style="margin-top: 10px;" @click="register">注册</button>
       </form>
-      <p class="login-link">已经有帐户？<router-link to="/login">登录</router-link></p>
+      <p class="login-link">已经有帐户？<router-link to="/auth/login">登录</router-link></p>
     </div>
   </div>
 </template>
@@ -60,6 +60,25 @@ export default {
       event.preventDefault();
       // 在这里处理注册逻辑，包括用户名、密码、确认密码和验证码的验证
       // 如果注册成功，可以跳转到登录页面或执行其他操作
+      if (this.password !== this.confirmPassword) {
+        this.$message.warning('两次输入的密码不一致');
+        return;
+      }
+
+      // 判断密码是否过于简单，要求八位以上，且包含数字和字母
+      const reg = /^(?=.*[a-zA-Z])(?=.*\d)[^]{8,}$/;
+      if (!reg.test(this.password)) {
+        this.$message.warning('密码过于简单！要求八位以上，且包含数字和字母！');
+        return;
+      }
+
+      // 判断邮箱格式是否正确
+      const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if (!regEmail.test(this.email)) {
+        this.$message.warning('邮箱格式不正确！');
+        return;
+      }
+
 
       let data = {
         username : this.username,
@@ -69,9 +88,13 @@ export default {
       }
 
       fetchRegister(data)
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
+          .then(res => {
+            if (res.data.code === 200) {
+              this.$message.success('注册成功');
+              this.$router.push('/auth/login');
+            } else {
+              this.$message.error(res.data.data);
+            }
           })
           .catch(error => {
             console.error('Error:', error);

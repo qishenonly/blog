@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"blog/api/code"
 	"blog/global"
 	"blog/models"
 	"blog/utils"
@@ -18,6 +19,11 @@ type ResetTokenActivatedData struct {
 	Activated bool   `json:"activated"`
 }
 
+type ResetFailRequestData struct {
+	Msg        string          `json:"msg"`
+	CustomCode code.CustomCode `json:"custom_code"`
+}
+
 // ResetPwd godoc
 // @Summary 重置密码
 // @Description 重置密码
@@ -32,7 +38,11 @@ type ResetTokenActivatedData struct {
 func (ra *AuthApi) ResetPwd(c *gin.Context) {
 	email := c.Param("email")
 	if email == "" {
-		utils.NewFailResponse("参数错误", c)
+		response := ResetFailRequestData{
+			Msg:        "获取参数失败",
+			CustomCode: code.ParamError,
+		}
+		utils.NewFailResponse(response, c)
 		return
 	}
 
@@ -43,7 +53,7 @@ func (ra *AuthApi) ResetPwd(c *gin.Context) {
 		return
 	}
 
-	// 判断是否重置过密码
+	// 没有重置过密码
 	if user.ResetPasswordToken == "" {
 		resetToken := utils.RandString(50)
 		resetTokenData := utils.VerifyTokenData{
@@ -83,6 +93,48 @@ func (ra *AuthApi) ResetPwd(c *gin.Context) {
 
 	}
 
+	// 重置过密码
+	if user.ResetPasswordToken != "" {
+		// 判断重置密码token是否过期
+		if user.ResetPasswordTokenExpiredAt < time.Now().UnixNano() {
+			resetToken := utils.RandString(50)
+			resetTokenData := utils.VerifyTokenData{
+				Token: resetToken,
+				Email: email,
+			}
+			// 发送邮件
+			if err := utils.SendWithTemplate("reset_pwd_email",
+				resetTokenData, email, "用户 "+user.Username+" 重置密码操作！"); err != nil {
+				global.Logger.Error("发送邮件失败: ", err)
+				utils.NewFailResponse("发送邮件失败！", c)
+				return
+			}
+
+			// 保存重置密码token
+			if err := global.DB.Model(&user).Update("reset_password_token",
+				resetToken).Error; err != nil {
+				global.Logger.Error("保存重置密码token失败: ", err)
+				utils.NewFailResponse("重置密码失败！", c)
+				return
+			}
+
+			// 保存重置密码token过期时间
+			expireTime := time.Now().Add(time.Hour * 24).UnixNano()
+			if err := global.DB.Model(&user).Update("reset_password_token_expired_at",
+				expireTime).Error; err != nil {
+				global.Logger.Error("保存重置密码token过期时间失败: ", err)
+				utils.NewFailResponse("重置密码失败！", c)
+			}
+
+			data := ResetTokenActivatedData{
+				Msg:       "重置密码激活链接已发送，请查收邮件激活！",
+				Activated: false,
+			}
+			utils.NewSuccessResponse(data, c)
+			return
+		}
+	}
+
 	// 判断是否激活
 	if !user.ResetPasswordTokenUsed {
 		data := ResetTokenActivatedData{
@@ -97,13 +149,17 @@ func (ra *AuthApi) ResetPwd(c *gin.Context) {
 	var request ResetPwd
 	if err := c.ShouldBindJSON(&request); err != nil {
 		global.Logger.Error("获取参数失败", err)
-		utils.NewFailResponse("获取参数失败", c)
+		response := ResetFailRequestData{
+			Msg:        "获取参数失败",
+			CustomCode: code.ParamError,
+		}
+		utils.NewFailResponse(response, c)
 		return
 	}
 
 	// 判断参数是否为空
 	if request.NewPassword == "" || request.Code == "" {
-		utils.NewFailResponse("参数错误", c)
+		utils.NewFailResponse("参数不能为空", c)
 		return
 	}
 
@@ -132,9 +188,9 @@ func (ra *AuthApi) ResetPwd(c *gin.Context) {
 		return
 	}
 
-	// 更新密码
+	// 重置密码
 	if err = global.DB.Model(&user).Update("password", newEncryptPwd).Error; err != nil {
-		global.Logger.Error("更新密码失败: ", err)
+		global.Logger.Error("重置密码失败: ", err)
 		utils.NewFailResponse("重置密码失败！", c)
 		return
 	}

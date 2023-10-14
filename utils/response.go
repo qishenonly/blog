@@ -23,8 +23,9 @@ func NewSuccessResponse(data interface{}, c *gin.Context) {
 }
 
 // NewFailResponse 返回失败响应
-func NewFailResponse(msg string, c *gin.Context) {
-	NewResponse(400, msg, nil, c)
+func NewFailResponse(data interface{}, c *gin.Context) {
+	//NewResponse(400, msg, nil, c)
+	NewResponse(400, "fail", data, c)
 }
 
 // NewUnauthorizedResponse 返回未授权响应

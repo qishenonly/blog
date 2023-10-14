@@ -91,9 +91,9 @@ export function fetchLoginCode() {
 }
 
 // 重置密码
-export function fetchResetPwd(data) {
+export function fetchResetPwd(email,data) {
     return request({
-        url: '/auth/reset_pwd',
+        url: `/auth/reset_pwd/${email}`,
         method: 'post',
         data: data
     })
