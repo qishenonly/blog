@@ -33,6 +33,9 @@ func InitRouter() *gin.Engine {
 	// Auth 路由组
 	routerGroup.InitAuthRouter()
 
+	// Home 路由组
+	routerGroup.InitHomeRouter()
+
 	return router
 
 }

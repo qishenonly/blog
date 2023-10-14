@@ -52,10 +52,19 @@ type ArticleModel struct {
 	SourceUrl string `gorm:"type:varchar(100);not null;default:'';comment:'原文链接'" json:"source_url"`
 
 	// 文章封面
-	Banner BannerModel `gorm:"type:varchar(100);not null;default:'';comment:'文章封面'" json:"banner"`
+	//Banner BannerModel `gorm:"type:varchar(100);not null;default:'';comment:'文章封面'" json:"banner"`
 
 	// 文章封面 ID
-	BannerID uint `gorm:"not null;default:0;comment:'文章封面 ID'" json:"banner_id"`
+	//BannerID uint `gorm:"not null;default:0;comment:'文章封面 ID'" json:"banner_id"`
+
+	// 文章封面 PATH
+	//BannerPath string `gorm:"type:varchar(100);not null;default:'';comment:'文章封面 PATH'" json:"banner_path"`
+
+	// 文章封面
+	Banner string `gorm:"type:varchar(100);not null;default:'';comment:'文章封面'" json:"banner"`
+
+	// 文章封面 ID
+	//BannerID uint `gorm:"not null;default:0;comment:'文章封面 ID'" json:"banner_id"`
 
 	// 文章封面 PATH
 	BannerPath string `gorm:"type:varchar(100);not null;default:'';comment:'文章封面 PATH'" json:"banner_path"`

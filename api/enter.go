@@ -2,6 +2,7 @@ package api
 
 import (
 	"blog/api/auth"
+	"blog/api/home"
 	"blog/api/setting"
 )
 
@@ -11,6 +12,9 @@ type ApiGroup struct {
 
 	// AuthApi 是一个 AuthApi 类型的变量，用来调用 auth 包中的方法
 	AuthApi auth.AuthApi
+
+	// HomeApi 是一个 HomeApi 类型的变量，用来调用 home 包中的方法
+	HomeApi home.HomeApi
 }
 
 // NewApiGroup 是一个 ApiGroup 类型的函数，用来初始化 ApiGroup 结构体
@@ -18,5 +22,6 @@ func NewApiGroup() ApiGroup {
 	return ApiGroup{
 		SettingApi: setting.SettingApi{},
 		AuthApi:    auth.AuthApi{},
+		HomeApi:    home.HomeApi{},
 	}
 }
