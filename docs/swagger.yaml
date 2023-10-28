@@ -6,6 +6,49 @@ info:
   title: Gin-Blog API 文档
   version: "0.1"
 paths:
+  /article/faker:
+    post:
+      consumes:
+      - application/json
+      description: 生成文章数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"生成文章数据成功"}'
+          schema:
+            type: string
+      summary: 生成文章数据
+      tags:
+      - Article
+  /article/list:
+    post:
+      consumes:
+      - application/json
+      description: 获取文章列表
+      parameters:
+      - description: 页码
+        in: body
+        name: page
+        required: true
+        schema:
+          type: integer
+      - description: 每页数量
+        in: body
+        name: page_size
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      summary: 获取文章列表
+      tags:
+      - Article
   /auth/github:
     get:
       consumes:
