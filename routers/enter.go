@@ -36,6 +36,9 @@ func InitRouter() *gin.Engine {
 	// Home 路由组
 	routerGroup.InitHomeRouter()
 
+	// Article 路由组
+	routerGroup.InitArticleRouter()
+
 	return router
 
 }

@@ -1,6 +1,8 @@
 package models
 
-import _type "blog/models/type"
+import (
+	_type "blog/models/type"
+)
 
 // ArticleModel 是一个 ArticleModel 类型的结构体，用来映射数据库中的 articles 表
 type ArticleModel struct {
