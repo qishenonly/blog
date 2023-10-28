@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"blog/global"
-	"blog/models"
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/models"
 )
 
 // MakeMigrations 数据库迁移

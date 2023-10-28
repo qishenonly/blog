@@ -1,10 +1,12 @@
 package utils
 
 import (
-	"blog/global"
 	"errors"
-	"github.com/dgrijalva/jwt-go/v4"
 	"time"
+
+	"github.com/qishenonly/blog/global"
+
+	"github.com/dgrijalva/jwt-go/v4"
 )
 
 // jwt payload

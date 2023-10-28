@@ -1,10 +1,10 @@
 package api
 
 import (
-	"blog/api/article"
-	"blog/api/auth"
-	"blog/api/home"
-	"blog/api/setting"
+	"github.com/qishenonly/blog/api/article"
+	"github.com/qishenonly/blog/api/auth"
+	"github.com/qishenonly/blog/api/home"
+	"github.com/qishenonly/blog/api/setting"
 )
 
 type ApiGroup struct {

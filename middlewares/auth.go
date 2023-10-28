@@ -1,8 +1,9 @@
 package middlewares
 
 import (
-	"blog/global"
-	"blog/utils"
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/utils"
+
 	"github.com/gin-gonic/gin"
 )
 

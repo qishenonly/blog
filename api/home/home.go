@@ -1,7 +1,8 @@
 package home
 
 import (
-	"blog/utils"
+	"github.com/qishenonly/blog/utils"
+
 	"github.com/gin-gonic/gin"
 )
 

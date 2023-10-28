@@ -1,11 +1,13 @@
 package article
 
 import (
-	"blog/global"
-	"blog/models"
-	"blog/utils"
-	"github.com/gin-gonic/gin"
 	"time"
+
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/models"
+	"github.com/qishenonly/blog/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ArticleInfo struct {

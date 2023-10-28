@@ -1,12 +1,14 @@
 package core
 
 import (
-	"blog/config"
-	"blog/global"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"log"
 	"os"
+
+	"github.com/qishenonly/blog/config"
+	"github.com/qishenonly/blog/global"
+
+	"gopkg.in/yaml.v2"
 )
 
 // InitCnf 用来初始化配置信息

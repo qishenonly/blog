@@ -1,9 +1,10 @@
 package article
 
 import (
-	"blog/global"
-	"blog/models"
-	"blog/utils"
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/models"
+	"github.com/qishenonly/blog/utils"
+
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/gin-gonic/gin"
 )

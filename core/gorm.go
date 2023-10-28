@@ -1,11 +1,13 @@
 package core
 
 import (
-	"blog/global"
+	"time"
+
+	"github.com/qishenonly/blog/global"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"time"
 )
 
 func InitGorm() *gorm.DB {

@@ -1,11 +1,13 @@
 package models
 
 import (
-	"blog/global"
-	_type "blog/models/type"
-	"blog/utils"
-	"gorm.io/gorm"
 	"time"
+
+	"github.com/qishenonly/blog/global"
+	_type "github.com/qishenonly/blog/models/type"
+	"github.com/qishenonly/blog/utils"
+
+	"gorm.io/gorm"
 )
 
 // UserModel 是一个 UserModel 类型的结构体，用来映射数据库中的 users 表

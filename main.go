@@ -1,11 +1,11 @@
 package main
 
 import (
-	"blog/cmd"
-	"blog/core"
-	_ "blog/docs"
-	"blog/global"
-	"blog/routers"
+	"github.com/qishenonly/blog/cmd"
+	"github.com/qishenonly/blog/core"
+	_ "github.com/qishenonly/blog/docs"
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/routers"
 )
 
 // @title Gin-Blog API 文档

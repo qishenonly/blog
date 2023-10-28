@@ -1,7 +1,7 @@
 package models
 
 import (
-	_type "blog/models/type"
+	_type "github.com/qishenonly/blog/models/type"
 )
 
 // ArticleModel 是一个 ArticleModel 类型的结构体，用来映射数据库中的 articles 表

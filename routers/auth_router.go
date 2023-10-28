@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"blog/api"
+	"github.com/qishenonly/blog/api"
 )
 
 func (router RouterGroup) InitAuthRouter() {

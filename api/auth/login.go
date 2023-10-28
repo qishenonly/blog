@@ -1,11 +1,13 @@
 package auth
 
 import (
-	"blog/global"
-	"blog/models"
-	"blog/utils"
-	"github.com/gin-gonic/gin"
 	"strconv"
+
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/models"
+	"github.com/qishenonly/blog/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Login struct {

@@ -1,7 +1,8 @@
 package global
 
 import (
-	"blog/config"
+	"github.com/qishenonly/blog/config"
+
 	"github.com/ByteStorage/FlyDB/engine"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"blog/api"
+	"github.com/qishenonly/blog/api"
 )
 
 // InitSettingRouter 是一个 RouterGroup 类型的方法，用来初始化路由组

@@ -1,12 +1,14 @@
 package utils
 
 import (
-	"blog/global"
 	"bytes"
 	"crypto/tls"
-	"gopkg.in/gomail.v2"
 	"html/template"
 	"path"
+
+	"github.com/qishenonly/blog/global"
+
+	"gopkg.in/gomail.v2"
 )
 
 // 邮件发送

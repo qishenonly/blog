@@ -1,10 +1,11 @@
 package auth
 
 import (
-	"blog/global"
-	"blog/models"
-	_type "blog/models/type"
-	"blog/utils"
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/models"
+	_type "github.com/qishenonly/blog/models/type"
+	"github.com/qishenonly/blog/utils"
+
 	"github.com/gin-gonic/gin"
 )
 

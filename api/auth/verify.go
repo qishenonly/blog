@@ -1,13 +1,15 @@
 package auth
 
 import (
-	"blog/global"
-	"blog/models"
-	"blog/utils"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/models"
+	"github.com/qishenonly/blog/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Verify godoc

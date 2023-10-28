@@ -1,8 +1,9 @@
 package routers
 
 import (
-	"blog/global"
-	"blog/middlewares"
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/middlewares"
+
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

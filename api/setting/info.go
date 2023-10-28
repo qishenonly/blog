@@ -1,7 +1,8 @@
 package setting
 
 import (
-	"blog/utils"
+	"github.com/qishenonly/blog/utils"
+
 	"github.com/gin-gonic/gin"
 )
 

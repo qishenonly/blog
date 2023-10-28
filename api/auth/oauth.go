@@ -2,12 +2,13 @@ package auth
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 var oauthStateString = "random"

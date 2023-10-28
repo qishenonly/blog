@@ -1,7 +1,8 @@
 package core
 
 import (
-	"blog/global"
+	"github.com/qishenonly/blog/global"
+
 	"github.com/ByteStorage/FlyDB/config"
 	"github.com/ByteStorage/FlyDB/engine"
 )

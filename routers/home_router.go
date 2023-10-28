@@ -1,6 +1,6 @@
 package routers
 
-import "blog/api"
+import "github.com/qishenonly/blog/api"
 
 func (router RouterGroup) InitHomeRouter() {
 	homeApi := api.NewApiGroup().HomeApi

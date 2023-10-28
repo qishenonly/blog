@@ -1,4 +1,4 @@
-module blog
+module github.com/qishenonly/blog
 
 go 1.20
 
