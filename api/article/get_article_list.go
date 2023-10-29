@@ -16,6 +16,7 @@ type ArticleInfo struct {
 	Description string `json:"description"`
 	PageView    uint   `json:"page_view"`
 	LikeNum     uint   `json:"like_num"`
+	CommentNum  uint   `json:"comment_num"`
 	BannerPath  string `json:"banner_path"`
 	CreateAt    string `json:"create_at"`
 }
@@ -50,7 +51,32 @@ func (aa *ArticleApi) GetArticleList(c *gin.Context) {
 		return
 	}
 
-	utils.NewSuccessResponse(articles, c)
+	var total int64
+	if err = global.DB.Model(&models.ArticleModel{}).Count(&total).Error; err != nil {
+		global.Logger.Error("获取文章总数失败: ", err)
+		utils.NewFailResponse("获取文章总数失败", c)
+		return
+	}
+
+	// 判断是否还有更多数据
+	var hasMore bool
+	if total > int64(request.Page*request.PageSize) {
+		hasMore = true
+	} else {
+		hasMore = false
+	}
+
+	response := struct {
+		ArticleList []ArticleInfo `json:"article_list"`
+		HasMore     bool          `json:"has_more"`
+		CurrentPage int           `json:"current_page"`
+	}{
+		ArticleList: articles,
+		HasMore:     hasMore,
+		CurrentPage: request.Page,
+	}
+
+	utils.NewSuccessResponse(response, c)
 
 }
 
@@ -76,6 +102,7 @@ func GetArticles(page, pageSize int) ([]ArticleInfo, error) {
 			Description: article.Introduction,
 			PageView:    uint(article.PageView),
 			LikeNum:     uint(article.LikeNum),
+			CommentNum:  uint(article.CommentNum),
 			BannerPath:  article.BannerPath,
 			CreateAt:    time.Unix(article.CreatedAt, 0).Format("2006-01-02 15:04:05"),
 		})

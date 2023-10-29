@@ -26,7 +26,7 @@
             <main class="site-main" :class="{'search':hideSlogan}">
                 <section-title v-if="!hideSlogan">推荐</section-title>
                 <template v-for="item in postList">
-                    <post :post="item" :key="item.id"></post>
+                    <post :post="item" :key="item.article_id"></post>
                 </template>
             </main>
 
@@ -55,7 +55,8 @@
                 features: [],
                 postList: [],
                 currPage: 1,
-                hasNextPage: false
+                hasNextPage: false,
+                pageSize: 10
             }
         },
         components: {
@@ -89,19 +90,20 @@
                 })
             },
             fetchList() {
-                fetchList().then(res => {
-                    this.postList = res.data.items || []
-                    this.currPage = res.data.page
-                    this.hasNextPage = res.data.hasNextPage
+                fetchList({page:this.currPage, page_size:this.pageSize}).then(res => {
+                    // console.log("--------------------",res.data.data.article_list)
+                    this.postList = res.data.data.article_list || []
+                    this.currPage = res.data.data.current_page
+                    this.hasNextPage = res.data.data.has_more
                 }).catch(err => {
                     console.log(err)
                 })
             },
             loadMore() {
-                fetchList({page:this.currPage+1}).then(res => {
-                    this.postList = this.postList.concat(res.data.items || [])
-                    this.currPage = res.data.page
-                    this.hasNextPage = res.data.hasNextPage
+                fetchList({page:this.currPage+1, page_size:this.pageSize}).then(res => {
+                    this.postList = this.postList.concat(res.data.data.article_list || [])
+                    this.currPage = res.data.data.current_page
+                    this.hasNextPage = res.data.data.has_more
                 })
             }
         },

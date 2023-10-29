@@ -19,50 +19,6 @@
                     </header>
                     <!-- 正文输出 -->
                     <div class="entry-content" v-highlight>
-                        <p>@[TOC]</p>
-                        <h4 id="引言：">引言：</h4>
-                        <p>Lua 是一种轻量小巧的脚本语言，能为应用程序提供灵活的扩展和定制功能。</p>
-                        <h4 id="lua-应用场景">Lua 应用场景</h4>
-                        <ul>
-                            <li>游戏开发</li>
-                            <li>独立应用脚本</li>
-                            <li>Web 应用脚本</li>
-                            <li>扩展和数据库插件如：MySQL Proxy 和 MySQL WorkBench</li>
-                            <li>安全系统，如入侵检测系统</li>
-                        </ul>
-                        <hr>
-                        <h4 id="安装">安装</h4>
-                        <pre class="lang-shell"><code> curl -R -O http://www.lua.org/ftp/lua-5.3.5.tar.gz #下载
- tar zxf lua-5.3.5.tar.gz #解压
- cd lua-5.3.3 #进入解压文件夹
- make linux test #安装&amp;测试</code></pre>
-                        <hr>
-                        <h4 id="安装过程可能出现的问题">安装过程可能出现的问题</h4>
-                        <ol>
-                            <li>没有gcc命令(lua是C语言编写的，安装时依赖gcc)
-                                <blockquote>
-                                    <p>使用<code>which gcc</code>命令可以查看是否有gcc，如果没有使用下面命令进行安装gcc 与gcc-c++，</p>
-                                    <pre class="lang-shell"><code>yum -y install gcc
-yum -y install gcc-c++</code></pre>
-                                </blockquote>
-                            </li>
-                        </ol>
-                        <hr>
-                        <ol start="2">
-                            <li>致命错误：readline/readline.h：没有那个文件或目录
-                                <blockquote>
-                                    <p>执行如下命令即可:</p>
-                                    <pre class="lang-shell"><code>yum install libtermcap-devel ncurses-devel libevent-devel readline-devel</code></pre>
-                                </blockquote>
-                            </li>
-                        </ol>
-                        <hr>
-                        <h4 id="安装成功验证">安装成功验证</h4>
-                        <blockquote>
-                            <p>执行<code>lua -v</code>,出现如下信息代表安装成功<br/>
-                                Lua 5.1.4 Copyright (C) 1994-2008 Lua.org, PUC-Rio</p>
-                        </blockquote>
-                        <pre class="lang-shell"><code>lua -v</code></pre>
 
                     </div>
                     <!-- 文章底部 -->
