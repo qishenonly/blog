@@ -17,6 +17,7 @@ type Article struct {
 	LikeNum     int    `fake:"{number:1,500}"`
 	CommentNum  int    `fake:"{number:1,500}"`
 	CollectNum  int    `fake:"{number:1,500}"`
+	ImgUrl      string `fake:"{imageurl:200,200}"`
 }
 
 // Faker godoc
@@ -44,6 +45,7 @@ func (aa *ArticleApi) Faker(c *gin.Context) {
 		LikeNum:      article.LikeNum,
 		CommentNum:   article.CommentNum,
 		CollectNum:   article.CollectNum,
+		BannerPath:   article.ImgUrl,
 		AuthorID:     41,
 	}).Error; err != nil {
 		global.Logger.Error("文章数据插入失败: ", err)

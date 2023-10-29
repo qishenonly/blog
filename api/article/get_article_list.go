@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ArticleInfo struct {
+type ArticleInfos struct {
 	ArticleID   uint   `json:"article_id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
@@ -67,9 +67,9 @@ func (aa *ArticleApi) GetArticleList(c *gin.Context) {
 	}
 
 	response := struct {
-		ArticleList []ArticleInfo `json:"article_list"`
-		HasMore     bool          `json:"has_more"`
-		CurrentPage int           `json:"current_page"`
+		ArticleList []ArticleInfos `json:"article_list"`
+		HasMore     bool           `json:"has_more"`
+		CurrentPage int            `json:"current_page"`
 	}{
 		ArticleList: articles,
 		HasMore:     hasMore,
@@ -81,7 +81,7 @@ func (aa *ArticleApi) GetArticleList(c *gin.Context) {
 }
 
 // GetArticles 获取文章
-func GetArticles(page, pageSize int) ([]ArticleInfo, error) {
+func GetArticles(page, pageSize int) ([]ArticleInfos, error) {
 	var articles []models.ArticleModel
 
 	// 计算偏移量
@@ -94,9 +94,9 @@ func GetArticles(page, pageSize int) ([]ArticleInfo, error) {
 		return nil, err
 	}
 
-	var articleInfos []ArticleInfo
+	var ArticleInfoss []ArticleInfos
 	for _, article := range articles {
-		articleInfos = append(articleInfos, ArticleInfo{
+		ArticleInfoss = append(ArticleInfoss, ArticleInfos{
 			ArticleID:   article.ID,
 			Title:       article.Title,
 			Description: article.Introduction,
@@ -108,5 +108,5 @@ func GetArticles(page, pageSize int) ([]ArticleInfo, error) {
 		})
 	}
 
-	return articleInfos, nil
+	return ArticleInfoss, nil
 }

@@ -6,6 +6,27 @@ info:
   title: Gin-Blog API 文档
   version: "0.1"
 paths:
+  /article/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取文章
+      parameters:
+      - description: 文章ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      summary: 获取文章
+      tags:
+      - Article
   /article/faker:
     post:
       consumes:
