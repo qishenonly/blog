@@ -1,16 +1,16 @@
 <template>
     <div class="comment" :id="`comment${comment.id}`">
         <div class="comment-head">
-            <div class="user-avatar"><img :src="comment.fromUserAvatar" alt=""></div>
+            <div class="user-avatar"><img :src="comment.commenter.avatar" alt=""></div>
             <div class="head-right">
                 <section-title>
                     <div style="display: flex;align-items: center;justify-content: space-between;">
                         <div>
-                            <span class="from-user user-name">{{comment.fromUserName}}</span>
-                            <span class="to-user" v-if="comment.toUserId"><span style="margin: 0 5px;">@</span><span class="user-name">{{comment.toUserName}}</span></span>
+                            <span class="from-user user-name">{{comment.commenter.nickname}}</span>
+                            <span class="to-user" v-if="comment.commenter_id"><span style="margin: 0 5px;">@</span><span class="user-name">{{comment.toUserName}}</span></span>
                         </div>
                         <div style="font-size: 13px;">
-                            <span style="color: #9c9c9c;margin-right: 20px;">{{comment.createTime | parseTime}}</span>
+                            <span style="color: #9c9c9c;margin-right: 20px;">{{comment.created_at | parseTime}}</span>
                             <span @click.stop="showCommentEditor=true" style="cursor: pointer;">回复</span>
                         </div>
                     </div>

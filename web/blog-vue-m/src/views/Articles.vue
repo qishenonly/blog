@@ -11,15 +11,15 @@
                     <!-- 文章头部 -->
                     <header class="entry-header">
                         <!-- 标题输出 -->
-                        <h1 class="entry-title">看一遍闭着眼都会安装Lua了</h1>
+                        <h1 class="entry-title">{{ this.postList.title }}</h1>
                         <hr>
                         <div class="breadcrumbs">
-                            <div id="crumbs">最后更新时间：2020年04月21日</div>
+                            <div id="crumbs">最后更新时间：{{ this.postList.create_at }}</div>
                         </div>
                     </header>
                     <!-- 正文输出 -->
                     <div class="entry-content" v-highlight>
-
+                      <div class="content-text" v-html="this.postList.content"></div>
                     </div>
                     <!-- 文章底部 -->
                     <section-title>
@@ -27,7 +27,7 @@
                             <!-- 阅读次数 -->
                             <div class="post-like">
                                 <i class="iconfont iconeyes"></i>
-                                <span class="count">685</span>
+                                <span class="count">{{ this.postList.page_view }}</span>
                             </div>
                             <div class="donate" @click="showDonate=!showDonate">
                                 <span>赏</span>
@@ -39,22 +39,23 @@
                             <!-- 文章标签 -->
                             <div class="post-tags">
                                 <i class="iconfont iconcategory"></i>
-                                <router-link to="/category/web">Web</router-link>
+                                <router-link :to="'/category/' +  this.postList.category ">{{ this.postList.category }}</router-link>
                             </div>
                         </footer>
                     </section-title>
 
                     <!--声明-->
                     <div class="open-message">
-                        <p>声明：Gblog博客|版权所有，违者必究|如未注明，均为原创|本网站采用<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">BY-NC-SA</a>协议进行授权</p>
-                        <p>转载：转载请注明原文链接 - <a href="/">看一遍闭着眼都会安装Lua了</a></p>
+                        <p>声明：Blog博客|版权所有，违者必究|如未注明，均为原创|本网站采用<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">BY-NC-SA</a>协议进行授权</p>
+                        <p>转载：转载请注明原文链接 - <a :href="'/article/' + this.postList.id">{{ this.postList.title }}</a></p>
                     </div>
                     <!--评论-->
                     <div class="comments">
-                        <comment v-for="item in comments" :key="item.comment.id" :comment="item.comment">
-                            <template v-if="item.reply.length">
-                                <comment v-for="reply in item.reply" :key="reply.id" :comment="reply"></comment>
-                            </template>
+                        <comment v-for="item in this.postList.comments" :key="item.id" :comment="item">
+<!--                            <template v-if="item.reply.length">-->
+<!--                            <template>-->
+<!--                                <comment v-for="reply in item.reply" :key="reply.id" :comment="reply"></comment>-->
+<!--                            </template>-->
                         </comment>
                     </div>
                 </article>
@@ -68,14 +69,15 @@
     import sectionTitle from '@/components/section-title'
     import comment from '@/components/comment'
     import menuTree from '@/components/menu-tree'
-    import {fetchComment} from '../api'
+    import {fetchArticle, fetchComment} from '../api'
     export default {
         name: 'articles',
         data(){
           return{
               showDonate: false,
               comments: [],
-              menus: []
+              menus: [],
+              postList: [],
           }
         },
         components: {
@@ -85,6 +87,14 @@
             menuTree
         },
         methods: {
+          fetchArticle() {
+            console.log(this.$route.params.id)
+            fetchArticle(this.$route.params.id).then(res => {
+              this.postList = res.data.data || []
+            }).catch(err => {
+              console.log(err)
+            })
+          },
           getComment(){
               fetchComment().then(res => {
                   this.comments = res.data || []
@@ -123,6 +133,7 @@
           }
         },
         mounted(){
+            this.fetchArticle()
             this.createMenus()
         },
         created() {

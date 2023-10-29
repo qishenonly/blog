@@ -8,6 +8,13 @@ export function fetchList(data) {
     })
 }
 
+export function fetchArticle(id) {
+    return request({
+        url: `/article/detail/${id}`,
+        method: 'get',
+    })
+}
+
 export function fetchFocus() {
     return request({
         url: '/focus/list',

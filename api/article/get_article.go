@@ -28,11 +28,20 @@ type ArticleInfo struct {
 	CreateAt    string        `json:"create_at"`
 }
 
+type UserModel struct {
+	ID       uint   `json:"id"`
+	Nickname string `json:"nickname"`
+	Avatar   string `json:"avatar"`
+}
+
 type CommentInfo struct {
-	CommenterID uint   `json:"commenter_id"`
-	Content     string `json:"content"`
-	LikeNum     uint   `json:"like_num"`
-	CreatedAt   string `json:"created_at"`
+	ID          uint      `json:"id"`
+	CommenterID uint      `json:"commenter_id"`
+	Commenter   UserModel `json:"commenter"`
+	Content     string    `json:"content"`
+	LikeNum     uint      `json:"like_num"`
+	DislikeNum  uint      `json:"dislike_num"`
+	CreatedAt   string    `json:"created_at"`
 }
 
 // GetArticle godoc
@@ -54,10 +63,26 @@ func (aa *ArticleApi) GetArticle(c *gin.Context) {
 	}
 
 	commentInfo := make([]CommentInfo, 0)
-	if err := global.DB.Model(&models.CommentModel{}).Where("article_id = ?", id).Find(&commentInfo).Error; err != nil {
+	if err := global.DB.Model(&models.CommentModel{}).Where("article_id = ?",
+		id).Find(&commentInfo).Error; err != nil {
 		global.Logger.Error("获取评论失败: ", err)
 		utils.NewFailResponse("获取评论失败", c)
 		return
+	}
+
+	// 获取评论者信息
+	for i := 0; i < len(commentInfo); i++ {
+		var commenter models.UserModel
+		if err := global.DB.Where("id = ?", commentInfo[i].CommenterID).First(&commenter).Error; err != nil {
+			global.Logger.Error("获取评论者信息失败: ", err)
+			utils.NewFailResponse("获取评论者信息失败", c)
+			return
+		}
+		commentInfo[i].Commenter = UserModel{
+			ID:       commenter.ID,
+			Nickname: commenter.Nickname,
+			Avatar:   commenter.Avatar,
+		}
 	}
 
 	articleInfo := ArticleInfo{
