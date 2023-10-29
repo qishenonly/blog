@@ -76,16 +76,13 @@ export default {
       }
 
       let data = {
-        username : this.username,
-        password : this.password,
-        email : this.email,
+        new_password : this.password,
         code : this.captchaInput
       }
-
-      fetchResetPwd(data)
-          .then(response => response.json())
+      console.log(data)
+      fetchResetPwd(this.$route.params.email, data)
           .then(data => {
-            console.log(data);
+            console.log("---", data);
           })
           .catch(error => {
             console.error('Error:', error);
@@ -112,7 +109,7 @@ export default {
     },
 
     async generateCaptcha() {
-      await this.getRegisterCode();
+      await this.getResetCode();
 
       const canvas = this.$refs.captchaCanvas;
       const ctx = canvas.getContext('2d');
