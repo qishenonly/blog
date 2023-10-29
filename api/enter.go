@@ -5,6 +5,7 @@ import (
 	"github.com/qishenonly/blog/api/auth"
 	"github.com/qishenonly/blog/api/home"
 	"github.com/qishenonly/blog/api/setting"
+	"github.com/qishenonly/blog/api/user"
 )
 
 type ApiGroup struct {
@@ -19,6 +20,9 @@ type ApiGroup struct {
 
 	// ArticleApi 是一个 ArticleApi 类型的变量，用来调用 article 包中的方法
 	ArticleApi article.ArticleApi
+
+	// UserApi 是一个 UserApi 类型的变量，用来调用 user 包中的方法
+	UserApi user.UserApi
 }
 
 // NewApiGroup 是一个 ApiGroup 类型的函数，用来初始化 ApiGroup 结构体
@@ -28,5 +32,6 @@ func NewApiGroup() ApiGroup {
 		AuthApi:    auth.AuthApi{},
 		HomeApi:    home.HomeApi{},
 		ArticleApi: article.ArticleApi{},
+		UserApi:    user.UserApi{},
 	}
 }

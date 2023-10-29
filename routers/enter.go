@@ -40,6 +40,9 @@ func InitRouter() *gin.Engine {
 	// Article 路由组
 	routerGroup.InitArticleRouter()
 
+	// User 路由组
+	routerGroup.InitUserRouter()
+
 	return router
 
 }

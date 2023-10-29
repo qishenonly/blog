@@ -26,6 +26,24 @@ type UserModel struct {
 	// 头像
 	Avatar string `gorm:"type:varchar(100);not null;default:'';comment:'头像'" json:"avatar"`
 
+	// 激励语
+	Motto string `gorm:"type:varchar(100);not null;default:'';comment:'激励语'" json:"motto"`
+
+	// 社交帐号链接-QQ
+	QQ string `gorm:"type:varchar(50);not null;default:'';comment:'社交帐号链接-QQ'" json:"qq"`
+
+	// 社交帐号链接-GitHub
+	Github string `gorm:"type:varchar(50);not null;default:'';comment:'社交帐号链接-GitHub'" json:"github"`
+
+	// 社交帐号链接-Gitee
+	Gitee string `gorm:"type:varchar(50);not null;default:'';comment:'社交帐号链接-Gitee'" json:"gitee"`
+
+	// 社交帐号链接-知乎
+	Zhihu string `gorm:"type:varchar(50);not null;default:'';comment:'社交帐号链接-知乎'" json:"zhihu"`
+
+	// 社交帐号链接-CSDN
+	CSDN string `gorm:"type:varchar(50);not null;default:'';comment:'社交帐号链接-CSDN'" json:"csdn"`
+
 	// 邮箱
 	Email string `gorm:"type:varchar(50);not null;default:'';comment:'邮箱'" json:"email"`
 
@@ -93,6 +111,7 @@ type UserModel struct {
 func (u *UserModel) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ActivationToken = utils.RandString(50)
 	u.ActivationTokenExpiredAt = time.Now().Add(time.Hour * 24).UnixNano()
+	u.Motto = utils.GenerateMotto()
 	return
 }
 
