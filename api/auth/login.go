@@ -145,3 +145,95 @@ func (la *AuthApi) LoginCode(c *gin.Context) {
 	global.Logger.Println("登录验证码：", code)
 	utils.NewCodeResponse(code, "登录验证码！请在5分钟内使用！", c)
 }
+
+type Token struct {
+	Token string `json:"token" binding:"required"`
+}
+
+type Response struct {
+	IsLogin bool   `json:"is_login"`
+	Msg     string `json:"msg"`
+}
+
+// IsLogin godoc
+// @Summary 判断是否登录
+// @Description 判断是否登录
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param token body string true "token"
+func (la *AuthApi) IsLogin(c *gin.Context) {
+	var request Token
+	if err := c.ShouldBindJSON(&request); err != nil {
+		global.Logger.Error("获取参数失败", err)
+		utils.NewFailResponse("获取参数失败", c)
+		return
+	}
+
+	// 判断token是否过期
+	ok, err := utils.ValidToken(request.Token)
+	if err != nil && !ok {
+		response := Response{
+			IsLogin: false,
+			Msg:     "token过期！",
+		}
+		global.Logger.Error("token验证失败: ", err)
+		utils.NewFailResponse(response, c)
+		return
+	}
+
+	response := Response{
+		IsLogin: true,
+		Msg:     "token校验成功！",
+	}
+	utils.NewSuccessResponse(response, c)
+}
+
+// LogOut godoc
+// @Summary 退出登录
+// @Description 退出登录
+// @Tags Auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param token body string true "token"
+func (la *AuthApi) LogOut(c *gin.Context) {
+	var request Token
+	if err := c.ShouldBindJSON(&request); err != nil {
+		global.Logger.Error("获取参数失败", err)
+		utils.NewFailResponse("获取参数失败", c)
+		return
+	}
+
+	// 判断token是否过期
+	ok, err := utils.ValidToken(request.Token)
+	if err != nil && !ok {
+		response := Response{
+			IsLogin: false,
+			Msg:     "token过期！",
+		}
+		global.Logger.Error("token验证失败: ", err)
+		utils.NewFailResponse(response, c)
+		return
+	}
+
+	// 获取token中的用户id
+	id, err := utils.GetUserIdFromToken(request.Token)
+	if err != nil {
+		global.Logger.Error("获取用户id失败: ", err)
+		utils.NewFailResponse("退出登录失败！", c)
+		return
+	}
+	// 删除token
+	err = global.Cache.Delete([]byte("token_" + strconv.Itoa(int(id))))
+	if err != nil {
+		global.Logger.Error("token删除失败: ", err)
+		utils.NewFailResponse("退出登录失败！", c)
+		return
+	}
+
+	response := Response{
+		IsLogin: false,
+		Msg:     "退出登录成功！",
+	}
+	utils.NewSuccessResponse(response, c)
+}
