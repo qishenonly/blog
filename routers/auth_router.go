@@ -30,6 +30,12 @@ func (router RouterGroup) InitAuthRouter() {
 	// 重置密码激活
 	router.GET("/auth/verify/reset_pwd/:token/active/:email", authApi.VerifyResetPwd)
 
+	// 退出登录
+	router.POST("/auth/logout", authApi.LogOut)
+
+	// 判断登录状态
+	router.GET("/auth/is_login", authApi.IsLogin)
+
 	// 第三方登录
 	router.GET("/auth/github", authApi.AuthGithub)
 	router.GET("/auth/github_callback", authApi.AuthGithubCallback)
