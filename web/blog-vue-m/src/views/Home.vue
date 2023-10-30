@@ -8,7 +8,6 @@
                     <span v-if="searchWords">搜索结果："{{searchWords}}" 相关文章</span>
                     <span v-else-if="category">分类 "{{category}}" 相关文章</span>
                 </div>
-                <quote v-else>{{notice}}</quote>
             </div>
 
             <!--焦点图-->

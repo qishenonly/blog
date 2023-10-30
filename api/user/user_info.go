@@ -35,6 +35,7 @@ func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	// 游客状态未登录
 	var request RequestToken
 	if err := c.ShouldBindJSON(&request); err != nil {
+		global.Logger.Info("---", request.Token)
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
 			Avatar:  "https://picsum.photos/200/200",

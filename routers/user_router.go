@@ -6,5 +6,5 @@ func (router RouterGroup) InitUserRouter() {
 	userApi := api.NewApiGroup().UserApi
 
 	// 首页获取用户信息
-	router.GET("/user/info", userApi.GetUserInfo)
+	router.POST("/user/info", userApi.GetUserInfo)
 }

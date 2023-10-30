@@ -8,6 +8,14 @@ export function fetchList(data) {
     })
 }
 
+export function fetchUserInfo(data) {
+    return request({
+        url: '/user/info',
+        method: 'post',
+        data: data
+    })
+}
+
 export function fetchArticle(id) {
     return request({
         url: `/article/detail/${id}`,
