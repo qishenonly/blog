@@ -34,7 +34,7 @@ func (router RouterGroup) InitAuthRouter() {
 	router.POST("/auth/logout", authApi.LogOut)
 
 	// 判断登录状态
-	router.GET("/auth/is_login", authApi.IsLogin)
+	router.POST("/auth/is_login", authApi.IsLogin)
 
 	// 第三方登录
 	router.GET("/auth/github", authApi.AuthGithub)

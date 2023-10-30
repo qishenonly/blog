@@ -89,7 +89,7 @@ export default {
       }
       fetchUserInfo(data).then(res => {
         this.response = res.data.data || []
-        console.log(this.response)
+        // localStorage.setItem('is_login', this.response.is_login)
       }).catch(err => {
         console.log(err)
       })

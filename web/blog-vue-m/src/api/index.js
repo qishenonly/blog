@@ -16,6 +16,14 @@ export function fetchUserInfo(data) {
     })
 }
 
+export function fetchIsLogin(data) {
+    return request({
+        url: '/auth/is_login',
+        method: 'post',
+        data: data
+    })
+}
+
 export function fetchArticle(id) {
     return request({
         url: `/article/detail/${id}`,

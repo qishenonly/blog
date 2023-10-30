@@ -109,6 +109,10 @@
         mounted() {
             this.fetchFocus();
             this.fetchList();
+            // this.fetchIsLogin();
+        },
+        created() {
+          // this.fetchIsLogin();
         }
     }
 </script>

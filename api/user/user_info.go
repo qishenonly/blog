@@ -4,6 +4,7 @@ import (
 	"github.com/qishenonly/blog/global"
 	"github.com/qishenonly/blog/models"
 	"github.com/qishenonly/blog/utils"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +36,6 @@ func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	// 游客状态未登录
 	var request RequestToken
 	if err := c.ShouldBindJSON(&request); err != nil {
-		global.Logger.Info("---", request.Token)
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
 			Avatar:  "https://picsum.photos/200/200",
@@ -46,22 +46,35 @@ func (ua *UserApi) GetUserInfo(c *gin.Context) {
 		return
 	}
 
-	// 校验 token
-	ok, err := utils.ValidToken(request.Token)
-	if err != nil && !ok {
+	// 判断token是否存在
+	id, err := utils.GetUserIdFromToken(request.Token)
+	if err != nil {
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
 			Avatar:  "https://picsum.photos/200/200",
 			Motto:   utils.GenerateMotto(),
-			Msg:     "登录状态已过期，请重新登录！",
+			Msg:     "用户未登录，当前为游客模式！",
 		}
+		global.Logger.Error("token不存在: ", err)
+		utils.NewFailResponse(visitorResponse, c)
+		return
+	}
+	_, err = global.Cache.Get([]byte("token_" + strconv.Itoa(int(id))))
+	if err != nil {
+		visitorResponse := VisitorResponse{
+			IsLogin: false,
+			Avatar:  "https://picsum.photos/200/200",
+			Motto:   utils.GenerateMotto(),
+			Msg:     "用户未登录，当前为游客模式！",
+		}
+		global.Logger.Error("token不存在: ", err)
 		utils.NewFailResponse(visitorResponse, c)
 		return
 	}
 
-	// 获取id
-	id, err := utils.GetUserIdFromToken(request.Token)
-	if err != nil {
+	// 校验 token
+	ok, err := utils.ValidToken(request.Token)
+	if err != nil && !ok {
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
 			Avatar:  "https://picsum.photos/200/200",

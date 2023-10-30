@@ -170,9 +170,31 @@ func (la *AuthApi) IsLogin(c *gin.Context) {
 		return
 	}
 
+	// 判断token是否存在
+	id, err := utils.GetUserIdFromToken(request.Token)
+	if err != nil {
+		response := Response{
+			IsLogin: false,
+			Msg:     "token校验失败！",
+		}
+		global.Logger.Error("token不存在: ", err)
+		utils.NewFailResponse(response, c)
+		return
+	}
+	_, err = global.Cache.Get([]byte("token_" + strconv.Itoa(int(id))))
+	if err != nil {
+		response := Response{
+			IsLogin: false,
+			Msg:     "token校验失败！",
+		}
+		global.Logger.Error("token不存在: ", err)
+		utils.NewFailResponse(response, c)
+		return
+	}
+
 	// 判断token是否过期
 	ok, err := utils.ValidToken(request.Token)
-	if err != nil && !ok {
+	if err != nil && ok {
 		response := Response{
 			IsLogin: false,
 			Msg:     "token过期！",
@@ -204,6 +226,28 @@ func (la *AuthApi) LogOut(c *gin.Context) {
 		return
 	}
 
+	// 判断token是否存在
+	id, err := utils.GetUserIdFromToken(request.Token)
+	if err != nil {
+		response := Response{
+			IsLogin: false,
+			Msg:     "token校验失败！",
+		}
+		global.Logger.Error("token不存在: ", err)
+		utils.NewFailResponse(response, c)
+		return
+	}
+	_, err = global.Cache.Get([]byte("token_" + strconv.Itoa(int(id))))
+	if err != nil {
+		response := Response{
+			IsLogin: false,
+			Msg:     "token校验失败！",
+		}
+		global.Logger.Error("token不存在: ", err)
+		utils.NewFailResponse(response, c)
+		return
+	}
+
 	// 判断token是否过期
 	ok, err := utils.ValidToken(request.Token)
 	if err != nil && !ok {
@@ -217,7 +261,7 @@ func (la *AuthApi) LogOut(c *gin.Context) {
 	}
 
 	// 获取token中的用户id
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err = utils.GetUserIdFromToken(request.Token)
 	if err != nil {
 		global.Logger.Error("获取用户id失败: ", err)
 		utils.NewFailResponse("退出登录失败！", c)
