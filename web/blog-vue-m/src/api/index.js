@@ -24,6 +24,14 @@ export function fetchIsLogin(data) {
     })
 }
 
+export function fetchLogOut(data) {
+    return request({
+        url: '/auth/logout',
+        method: 'post',
+        data: data
+    })
+}
+
 export function fetchArticle(id) {
     return request({
         url: `/article/detail/${id}`,

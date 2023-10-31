@@ -32,17 +32,17 @@
       </div>
       <div v-if="this.is_login" class="menu-item">
 <!--        <router-link to="/user">主页</router-link>-->
-        <el-dropdown>
+        <el-dropdown @command="fetchTo">
           <span class="el-dropdown-link" >
             主页<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown" >
             <el-dropdown-item><router-link to="/user">主页</router-link></el-dropdown-item>
             <el-dropdown-item><router-link to="/user/write_article">写文章</router-link></el-dropdown-item>
-            <el-dropdown-item><router-link to="/user/update_pwd">修改密码</router-link></el-dropdown-item>
-            <el-dropdown-item>修改格言</el-dropdown-item>
-            <el-dropdown-item>修改社交帐号</el-dropdown-item>
-            <el-dropdown-item divided>退出登录</el-dropdown-item>
+            <el-dropdown-item command="update_pwd">修改密码</el-dropdown-item>
+            <el-dropdown-item command="update_motto">修改格言</el-dropdown-item>
+            <el-dropdown-item command="update_social_account">修改社交帐号</el-dropdown-item>
+            <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -50,12 +50,68 @@
         <router-link to="/auth/login">登录</router-link>
       </div>
     </div>
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="注册邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input v-model="form.password" placeholder="请输入密码" show-password autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" :label-width="formLabelWidth">
+          <el-input v-model="form.ensure_password" placeholder="请再次输入密码" show-password autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="fetchToUpdatePwd">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="修改格言" :visible.sync="dialogFormVisible2">
+      <el-form :model="form">
+        <el-form-item label="注册邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="格言" :label-width="formLabelWidth">
+          <el-input v-model="form.motto" placeholder="请输入新的格言" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="fetchToUpdatePwd">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="修改社交帐号" :visible.sync="dialogFormVisible3">
+      <el-form :model="form">
+        <el-form-item label="注册邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="QQ" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_qq" placeholder="请输入新的QQ帐号" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="GitHub" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_github" placeholder="请输入新的GitHub帐号" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Gitee" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_gitee" placeholder="请输入新的Gitee帐号" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="CSDN" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_csdn" placeholder="请输入新的CSDN帐号" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible3 = false">取 消</el-button>
+        <el-button type="primary" @click="fetchToUpdatePwd">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import HeaderSearch from '@/components/header-search'
-import {fetchCategory, fetchIsLogin} from '../../api'
+import {fetchCategory, fetchIsLogin, fetchLogOut} from '../../api'
 
 export default {
   name: "layout-header",
@@ -67,7 +123,23 @@ export default {
       hidden: false,
       category: [],
       mobileShow: false,
-      is_login: false
+      is_login: false,
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      dialogFormVisible2: false,
+      dialogFormVisible3: false,
+      form: {
+        email: localStorage.getItem('email') ? localStorage.getItem('email') : '请输入邮箱！',
+        type: [],
+        password: '',
+        ensure_password: '',
+        motto: '',
+        social_account_qq: '',
+        social_account_github: '',
+        social_account_gitee: '',
+        social_account_csdn: '',
+      },
+      formLabelWidth: '120px'
     }
   },
   mounted() {
@@ -114,7 +186,42 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-
+    },
+    fetchTo(command) {
+      if (command === 'logout') {
+        let data = {
+          token: localStorage.getItem('token')
+        }
+        fetchLogOut(data).then(res => {
+          console.log(res)
+          localStorage.removeItem('token')
+          localStorage.removeItem('is_login')
+          this.is_login = false
+          this.$router.push({path: '/'})
+        }).catch(err => {
+          console.log(err)
+        })
+      } else if (command === 'update_pwd') {
+        this.dialogFormVisible = true
+      } else if (command === 'update_motto') {
+        this.dialogFormVisible2 = true
+      } else if (command === 'update_social_account') {
+        this.dialogFormVisible3 = true
+      }
+    },
+    fetchToUpdatePwd() {
+      let data = {
+        email: this.form.email,
+        password: this.form.password,
+        token: localStorage.getItem('token')
+      }
+      // fetchUpdatePwd(data).then(res => {
+      //   console.log(res)
+      //   this.dialogFormVisible = false
+      // }).catch(err => {
+      //   console.log(err)
+      // })
+      this.dialogFormVisible = false
     }
   }
 }

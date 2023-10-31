@@ -30,6 +30,7 @@ type LoginUserResponse struct {
 	Gitee   string `json:"gitee"`
 	Zhihu   string `json:"zhihu"`
 	CSDN    string `json:"csdn"`
+	Email   string `json:"email"`
 }
 
 func (ua *UserApi) GetUserInfo(c *gin.Context) {
@@ -109,6 +110,7 @@ func (ua *UserApi) GetUserInfo(c *gin.Context) {
 		Gitee:   user.Gitee,
 		Zhihu:   user.Zhihu,
 		CSDN:    user.CSDN,
+		Email:   user.Email,
 	}
 
 	utils.NewSuccessResponse(loginUserResponse, c)
