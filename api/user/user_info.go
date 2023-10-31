@@ -1,10 +1,11 @@
 package user
 
 import (
+	"strconv"
+
 	"github.com/qishenonly/blog/global"
 	"github.com/qishenonly/blog/models"
 	"github.com/qishenonly/blog/utils"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +34,15 @@ type LoginUserResponse struct {
 	Email   string `json:"email"`
 }
 
+// GetUserInfo godoc
+// @Summary 获取用户信息
+// @Description 获取用户信息
+// @Tags User
+// @Accept  application/json
+// @Produce  application/json
+// @Param token body string true "token"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /user/info [post]
 func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	// 游客状态未登录
 	var request RequestToken
