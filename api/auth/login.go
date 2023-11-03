@@ -146,10 +146,6 @@ func (la *AuthApi) LoginCode(c *gin.Context) {
 	utils.NewCodeResponse(code, "登录验证码！请在5分钟内使用！", c)
 }
 
-type Token struct {
-	Token string `json:"token" binding:"required"`
-}
-
 type Response struct {
 	IsLogin bool   `json:"is_login"`
 	Msg     string `json:"msg"`
@@ -161,17 +157,18 @@ type Response struct {
 // @Tags Auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"判断是否登录"}"
+// @Router /auth/islogin [get]
 func (la *AuthApi) IsLogin(c *gin.Context) {
-	var request Token
-	if err := c.ShouldBindJSON(&request); err != nil {
-		global.Logger.Error("获取参数失败", err)
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		global.Logger.Error("获取参数失败")
 		utils.NewFailResponse("获取参数失败", c)
 		return
 	}
 
 	// 判断token是否存在
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		response := Response{
 			IsLogin: false,
@@ -193,7 +190,7 @@ func (la *AuthApi) IsLogin(c *gin.Context) {
 	}
 
 	// 判断token是否过期
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && ok {
 		response := Response{
 			IsLogin: false,
@@ -217,17 +214,18 @@ func (la *AuthApi) IsLogin(c *gin.Context) {
 // @Tags Auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"退出登录成功"}"
+// @Router /auth/logout [post]
 func (la *AuthApi) LogOut(c *gin.Context) {
-	var request Token
-	if err := c.ShouldBindJSON(&request); err != nil {
-		global.Logger.Error("获取参数失败", err)
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		global.Logger.Error("获取参数失败")
 		utils.NewFailResponse("获取参数失败", c)
 		return
 	}
 
 	// 判断token是否存在
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		response := Response{
 			IsLogin: false,
@@ -249,7 +247,7 @@ func (la *AuthApi) LogOut(c *gin.Context) {
 	}
 
 	// 判断token是否过期
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && !ok {
 		response := Response{
 			IsLogin: false,
@@ -261,7 +259,7 @@ func (la *AuthApi) LogOut(c *gin.Context) {
 	}
 
 	// 获取token中的用户id
-	id, err = utils.GetUserIdFromToken(request.Token)
+	id, err = utils.GetUserIdFromToken(token)
 	if err != nil {
 		global.Logger.Error("获取用户id失败: ", err)
 		utils.NewFailResponse("退出登录失败！", c)

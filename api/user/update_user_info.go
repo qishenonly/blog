@@ -11,7 +11,6 @@ import (
 
 // UpdateEmailRequest 用来映射修改邮箱请求参数
 type UpdateEmailRequest struct {
-	Token string `json:"token" binding:"required"`
 	Email string `json:"email" binding:"required"`
 }
 
@@ -21,11 +20,11 @@ type UpdateEmailRequest struct {
 // @Tags User
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
 // @Param email body string true "email"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户邮箱成功"}"
 // @Router /user/update_email [post]
 func (ua *UserApi) UpdateUserEmail(c *gin.Context) {
+	token := c.GetHeader("Authorization")
 	var request UpdateEmailRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		global.Logger.Error("获取参数失败", err)
@@ -34,14 +33,14 @@ func (ua *UserApi) UpdateUserEmail(c *gin.Context) {
 	}
 
 	// 判断参数是否为空
-	if request.Token == "" || request.Email == "" {
+	if token == "" || request.Email == "" {
 		global.Logger.Error("参数错误")
 		utils.NewFailResponse("参数错误", c)
 		return
 	}
 
 	// 校验 token
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && !ok {
 		global.Logger.Error("token校验失败！", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -49,7 +48,7 @@ func (ua *UserApi) UpdateUserEmail(c *gin.Context) {
 	}
 
 	// 获取用户id
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		global.Logger.Error("Token过期: ", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -83,7 +82,6 @@ func (ua *UserApi) UpdateUserEmail(c *gin.Context) {
 
 // UpdatePwdRequest 用来映射修改密码请求参数
 type UpdatePwdRequest struct {
-	Token       string `json:"token" binding:"required"`
 	NewPassword string `json:"new_password" binding:"required"`
 }
 
@@ -93,11 +91,11 @@ type UpdatePwdRequest struct {
 // @Tags User
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
 // @Param new_password body string true "new_password"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户密码成功！"}"
 // @Router /user/update_password [post]
 func (ua *UserApi) UpdateUserPassword(c *gin.Context) {
+	token := c.GetHeader("Authorization")
 	var request UpdatePwdRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		global.Logger.Error("获取参数失败", err)
@@ -106,14 +104,14 @@ func (ua *UserApi) UpdateUserPassword(c *gin.Context) {
 	}
 
 	// 判断参数是否为空
-	if request.Token == "" || request.NewPassword == "" {
+	if token == "" || request.NewPassword == "" {
 		global.Logger.Error("参数错误")
 		utils.NewFailResponse("参数错误", c)
 		return
 	}
 
 	// 校验 token
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && !ok {
 		global.Logger.Error("token校验失败！", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -121,7 +119,7 @@ func (ua *UserApi) UpdateUserPassword(c *gin.Context) {
 	}
 
 	// 获取用户id
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		global.Logger.Error("Token过期: ", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -164,7 +162,6 @@ func (ua *UserApi) UpdateUserPassword(c *gin.Context) {
 
 // UpdateMottoRequest 用来映射修改motto请求参数
 type UpdateMottoRequest struct {
-	Token string `json:"token" binding:"required"`
 	Motto string `json:"motto" binding:"required"`
 }
 
@@ -174,11 +171,11 @@ type UpdateMottoRequest struct {
 // @Tags User
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
 // @Param motto body string true "motto"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户motto成功！"}"
 // @Router /user/update_motto [post]
 func (ua *UserApi) UpdateUserMotto(c *gin.Context) {
+	token := c.GetHeader("Authorization")
 	var request UpdateMottoRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		global.Logger.Error("获取参数失败", err)
@@ -187,14 +184,14 @@ func (ua *UserApi) UpdateUserMotto(c *gin.Context) {
 	}
 
 	// 判断参数是否为空
-	if request.Token == "" || request.Motto == "" {
+	if token == "" || request.Motto == "" {
 		global.Logger.Error("参数错误")
 		utils.NewFailResponse("参数错误", c)
 		return
 	}
 
 	// 校验 token
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && !ok {
 		global.Logger.Error("token校验失败！", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -202,7 +199,7 @@ func (ua *UserApi) UpdateUserMotto(c *gin.Context) {
 	}
 
 	// 获取用户id
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		global.Logger.Error("Token过期: ", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -227,30 +224,23 @@ func (ua *UserApi) UpdateUserMotto(c *gin.Context) {
 	utils.NewSuccessResponse("更新用户motto成功！", c)
 }
 
-// UpdateSocialAccountRequest 用来映射修改社交账号请求参数
-type UpdateSocialAccountRequest struct {
-	Token  string `json:"token" binding:"required"`
-	QQ     string `json:"qq" binding:"required"`
-	Github string `json:"github" binding:"required"`
-	Gitee  string `json:"gitee" binding:"required"`
-	CSDN   string `json:"csdn" binding:"required"`
+// UpdateSocialAccountQQRequest 用来映射修改社交账号请求参数
+type UpdateSocialAccountQQRequest struct {
+	QQ string `json:"qq" binding:"required"`
 }
 
-// UpdateUserSocialAccount godoc
+// UpdateUserSocialAccountQQ godoc
 // @Summary 修改用户社交账号
 // @Description 修改用户社交账号
 // @Tags User
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
 // @Param qq body string true "qq"
-// @Param github body string true "github"
-// @Param gitee body string true "gitee"
-// @Param csdn body string true "csdn"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
-// @Router /user/update_social_account [post]
-func (ua *UserApi) UpdateUserSocialAccount(c *gin.Context) {
-	var request UpdateSocialAccountRequest
+// @Router /user/update_social_account_qq [post]
+func (ua *UserApi) UpdateUserSocialAccountQQ(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	var request UpdateSocialAccountQQRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		global.Logger.Error("获取参数失败", err)
 		utils.NewFailResponse("获取参数失败", c)
@@ -258,14 +248,14 @@ func (ua *UserApi) UpdateUserSocialAccount(c *gin.Context) {
 	}
 
 	// 判断参数是否为空
-	if request.Token == "" {
+	if token == "" && request.QQ == "" {
 		global.Logger.Error("参数错误")
 		utils.NewFailResponse("参数错误", c)
 		return
 	}
 
 	// 校验 token
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && !ok {
 		global.Logger.Error("token校验失败！", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -273,7 +263,7 @@ func (ua *UserApi) UpdateUserSocialAccount(c *gin.Context) {
 	}
 
 	// 获取用户id
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		global.Logger.Error("Token过期: ", err)
 		utils.NewFailResponse("Token过期！", c)
@@ -294,23 +284,200 @@ func (ua *UserApi) UpdateUserSocialAccount(c *gin.Context) {
 		utils.NewFailResponse("更新用户QQ失败！", c)
 		return
 	}
+
+	utils.NewSuccessResponse("更新用户QQ社交账号成功！", c)
+}
+
+// UpdateSocialAccountGithubRequest 用来映射修改社交账号请求参数
+type UpdateSocialAccountGithubRequest struct {
+	Github string `json:"github" binding:"required"`
+}
+
+// UpdateUserSocialAccountGitHub godoc
+// @Summary 修改用户社交账号
+// @Description 修改用户社交账号
+// @Tags User
+// @Accept  application/json
+// @Produce  application/json
+// @Param github body string true "github"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+// @Router /user/update_social_account_github [post]
+func (ua *UserApi) UpdateUserSocialAccountGitHub(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	var request UpdateSocialAccountGithubRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		global.Logger.Error("获取参数失败", err)
+		utils.NewFailResponse("获取参数失败", c)
+		return
+	}
+
+	// 判断参数是否为空
+	if token == "" && request.Github == "" {
+		global.Logger.Error("参数错误")
+		utils.NewFailResponse("参数错误", c)
+		return
+	}
+
+	// 校验 token
+	ok, err := utils.ValidToken(token)
+	if err != nil && !ok {
+		global.Logger.Error("token校验失败！", err)
+		utils.NewFailResponse("Token过期！", c)
+		return
+	}
+
+	// 获取用户id
+	id, err := utils.GetUserIdFromToken(token)
+	if err != nil {
+		global.Logger.Error("Token过期: ", err)
+		utils.NewFailResponse("Token过期！", c)
+		return
+	}
+
+	// 根据用户id获取用户信息
+	var user models.UserModel
+	if err = global.DB.Where("id = ?", id).First(&user).Error; err != nil {
+		global.Logger.Error("获取用户信息失败: ", err)
+		utils.NewFailResponse("获取用户信息失败！", c)
+		return
+	}
+
+	// 更新用户社交账号
 	if err = updateUserField(global.DB, user, "github", request.Github); err != nil {
 		global.Logger.Error("更新用户Github失败: ", err)
 		utils.NewFailResponse("更新用户Github失败！", c)
 		return
 	}
+
+	utils.NewSuccessResponse("更新用户GitHub社交账号成功！", c)
+}
+
+// UpdateSocialAccountGiteeRequest 用来映射修改社交账号请求参数
+type UpdateSocialAccountGiteeRequest struct {
+	Gitee string `json:"gitee" binding:"required"`
+}
+
+// UpdateUserSocialAccountGitee godoc
+// @Summary 修改用户社交账号
+// @Description 修改用户社交账号
+// @Tags User
+// @Accept  application/json
+// @Produce  application/json
+// @Param github body string true "gitee"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+// @Router /user/update_social_account_gitee [post]
+func (ua *UserApi) UpdateUserSocialAccountGitee(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	var request UpdateSocialAccountGiteeRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		global.Logger.Error("获取参数失败", err)
+		utils.NewFailResponse("获取参数失败", c)
+		return
+	}
+
+	// 判断参数是否为空
+	if token == "" && request.Gitee == "" {
+		global.Logger.Error("参数错误")
+		utils.NewFailResponse("参数错误", c)
+		return
+	}
+
+	// 校验 token
+	ok, err := utils.ValidToken(token)
+	if err != nil && !ok {
+		global.Logger.Error("token校验失败！", err)
+		utils.NewFailResponse("Token过期！", c)
+		return
+	}
+
+	// 获取用户id
+	id, err := utils.GetUserIdFromToken(token)
+	if err != nil {
+		global.Logger.Error("Token过期: ", err)
+		utils.NewFailResponse("Token过期！", c)
+		return
+	}
+
+	// 根据用户id获取用户信息
+	var user models.UserModel
+	if err = global.DB.Where("id = ?", id).First(&user).Error; err != nil {
+		global.Logger.Error("获取用户信息失败: ", err)
+		utils.NewFailResponse("获取用户信息失败！", c)
+		return
+	}
+
+	// 更新用户社交账号
 	if err = updateUserField(global.DB, user, "gitee", request.Gitee); err != nil {
 		global.Logger.Error("更新用户Gitee失败: ", err)
 		utils.NewFailResponse("更新用户Gitee失败！", c)
 		return
 	}
+
+	utils.NewSuccessResponse("更新用户Gitee社交账号成功！", c)
+}
+
+// UpdateSocialAccountCSDNRequest 用来映射修改社交账号请求参数
+type UpdateSocialAccountCSDNRequest struct {
+	CSDN string `json:"csdn" binding:"required"`
+}
+
+// UpdateUserSocialAccountCSDN godoc
+// @Summary 修改用户社交账号
+// @Description 修改用户社交账号
+// @Tags User
+// @Accept  application/json
+// @Produce  application/json
+// @Param github body string true "csdn"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+// @Router /user/update_social_account_csdn [post]
+func (ua *UserApi) UpdateUserSocialAccountCSDN(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	var request UpdateSocialAccountCSDNRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		global.Logger.Error("获取参数失败", err)
+		utils.NewFailResponse("获取参数失败", c)
+		return
+	}
+
+	// 判断参数是否为空
+	if token == "" && request.CSDN == "" {
+		global.Logger.Error("参数错误")
+		utils.NewFailResponse("参数错误", c)
+		return
+	}
+
+	// 校验 token
+	ok, err := utils.ValidToken(token)
+	if err != nil && !ok {
+		global.Logger.Error("token校验失败！", err)
+		utils.NewFailResponse("Token过期！", c)
+		return
+	}
+
+	// 获取用户id
+	id, err := utils.GetUserIdFromToken(token)
+	if err != nil {
+		global.Logger.Error("Token过期: ", err)
+		utils.NewFailResponse("Token过期！", c)
+		return
+	}
+
+	// 根据用户id获取用户信息
+	var user models.UserModel
+	if err = global.DB.Where("id = ?", id).First(&user).Error; err != nil {
+		global.Logger.Error("获取用户信息失败: ", err)
+		utils.NewFailResponse("获取用户信息失败！", c)
+		return
+	}
+
+	// 更新用户社交账号
 	if err = updateUserField(global.DB, user, "csdn", request.CSDN); err != nil {
 		global.Logger.Error("更新用户CSDN失败: ", err)
 		utils.NewFailResponse("更新用户CSDN失败！", c)
 		return
 	}
 
-	utils.NewSuccessResponse("更新用户社交账号成功！", c)
+	utils.NewSuccessResponse("更新用户CSDN社交账号成功！", c)
 }
 
 // 更新用户字段

@@ -10,10 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RequestToken struct {
-	Token string `json:"token" binding:"required"`
-}
-
 type VisitorResponse struct {
 	IsLogin bool   `json:"is_login"`
 	Avatar  string `json:"avatar"`
@@ -40,13 +36,12 @@ type LoginUserResponse struct {
 // @Tags User
 // @Accept  application/json
 // @Produce  application/json
-// @Param token body string true "token"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /user/info [post]
+// @Router /user/info [get]
 func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	// 游客状态未登录
-	var request RequestToken
-	if err := c.ShouldBindJSON(&request); err != nil {
+	token := c.GetHeader("Authorization")
+	if token == "" {
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
 			Avatar:  "https://picsum.photos/200/200",
@@ -58,7 +53,7 @@ func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	}
 
 	// 判断token是否存在
-	id, err := utils.GetUserIdFromToken(request.Token)
+	id, err := utils.GetUserIdFromToken(token)
 	if err != nil {
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
@@ -84,7 +79,7 @@ func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	}
 
 	// 校验 token
-	ok, err := utils.ValidToken(request.Token)
+	ok, err := utils.ValidToken(token)
 	if err != nil && !ok {
 		visitorResponse := VisitorResponse{
 			IsLogin: false,
