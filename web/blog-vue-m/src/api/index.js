@@ -1,33 +1,119 @@
 import request from '@/utils/request'
 
-export function fetchList(data) {
+export function fetchList(data, token) {
     return request({
         url: '/article/list',
         method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
         data: data
     })
 }
 
-export function fetchUserInfo(data) {
+export function fetchUserInfo(token) {
     return request({
         url: '/user/info',
-        method: 'post',
-        data: data
+        method: 'get',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
     })
 }
 
-export function fetchIsLogin(data) {
+export function fetchIsLogin(token) {
     return request({
         url: '/auth/is_login',
-        method: 'post',
-        data: data
+        method: 'get',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
     })
 }
 
-export function fetchLogOut(data) {
+export function fetchLogOut(token) {
     return request({
         url: '/auth/logout',
         method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+    })
+}
+
+export function fetchUpdatePwd(data, token) {
+    return request({
+        url: '/user/update_password',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+        data: data
+    })
+}
+
+export function fetchToUpdateMotto(data, token) {
+    return request({
+        url: '/user/update_motto',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+        data: data
+    })
+}
+
+export function fetchToUpdateSocialAccountQQ(data, token) {
+    return request({
+        url: '/user/update_account_qq',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+        data: data
+    })
+}
+
+export function fetchToUpdateSocialAccountGithub(data, token) {
+    return request({
+        url: '/user/update_account_github',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+        data: data
+    })
+}
+
+export function fetchToUpdateSocialAccountGitee(data, token) {
+    return request({
+        url: '/user/update_account_gitee',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+        data: data
+    })
+}
+
+export function fetchToUpdateSocialAccountCSDN(data, token) {
+    return request({
+        url: '/user/update_account_csdn',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
+        data: data
+    })
+}
+
+export function fetchToUpdateEmail(data, token) {
+    return request({
+        url: '/user/update_email',
+        method: 'post',
+        headers: {
+            'Authorization': `${token}` // 将 Token 添加到 Authorization 头部
+        },
         data: data
     })
 }

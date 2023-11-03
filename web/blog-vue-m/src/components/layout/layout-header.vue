@@ -31,16 +31,21 @@
         <router-link to="/about">关于</router-link>
       </div>
       <div v-if="this.is_login" class="menu-item">
-<!--        <router-link to="/user">主页</router-link>-->
+        <!--        <router-link to="/user">主页</router-link>-->
         <el-dropdown @command="fetchTo">
-          <span class="el-dropdown-link" >
+          <span class="el-dropdown-link">
             主页<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
-          <el-dropdown-menu slot="dropdown" >
-            <el-dropdown-item><router-link to="/user">主页</router-link></el-dropdown-item>
-            <el-dropdown-item><router-link to="/user/write_article">写文章</router-link></el-dropdown-item>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <router-link to="/user">主页</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <router-link to="/user/write_article">写文章</router-link>
+            </el-dropdown-item>
             <el-dropdown-item command="update_pwd">修改密码</el-dropdown-item>
-            <el-dropdown-item command="update_motto">修改格言</el-dropdown-item>
+<!--            <el-dropdown-item command="update_email">修改邮箱</el-dropdown-item>-->
+            <el-dropdown-item command="update_motto">修改个性签名</el-dropdown-item>
             <el-dropdown-item command="update_social_account">修改社交帐号</el-dropdown-item>
             <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
@@ -53,13 +58,14 @@
     <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
-          <el-input v-model="form.email" autocomplete="off"></el-input>
+          <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
           <el-input v-model="form.password" placeholder="请输入密码" show-password autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" :label-width="formLabelWidth">
-          <el-input v-model="form.ensure_password" placeholder="请再次输入密码" show-password autocomplete="off"></el-input>
+          <el-input v-model="form.ensure_password" placeholder="请再次输入密码" show-password
+                    autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -68,42 +74,85 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="修改格言" :visible.sync="dialogFormVisible2">
+    <el-dialog title="修改个性签名" :visible.sync="dialogFormVisible2">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
-          <el-input v-model="form.email" autocomplete="off"></el-input>
+          <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="格言" :label-width="formLabelWidth">
-          <el-input v-model="form.motto" placeholder="请输入新的格言" autocomplete="off"></el-input>
+        <el-form-item label="个性签名" :label-width="formLabelWidth">
+          <el-input v-model="form.motto" placeholder="请输入新的个性签名" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible2 = false">取 消</el-button>
-        <el-button type="primary" @click="fetchToUpdatePwd">确 定</el-button>
+        <el-button type="primary" @click="fetchToUpdateMotto">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="修改邮箱" :visible.sync="dialogFormVisible4">
+      <el-form :model="form">
+        <el-form-item label="注册邮箱" :label-width="formLabelWidth">
+          <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="新的邮箱" :label-width="formLabelWidth">
+          <el-input v-model="form.new_email" placeholder="请输入新的邮箱" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible4 = false">取 消</el-button>
+        <el-button type="primary" @click="fetchToUpdateEmail">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog title="修改社交帐号" :visible.sync="dialogFormVisible3">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
-          <el-input v-model="form.email" autocomplete="off"></el-input>
+          <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="QQ" :label-width="formLabelWidth">
-          <el-input v-model="form.social_account_qq" placeholder="请输入新的QQ帐号" autocomplete="off"></el-input>
+        <el-form-item label="选择帐号" :label-width="formLabelWidth">
+          <el-select v-model="form.social_account_type" placeholder="请选择需要修改的帐号">
+            <el-option label="QQ" value="QQ"></el-option>
+            <el-option label="GitHub" value="GitHub"></el-option>
+            <el-option label="Gitee" value="Gitee"></el-option>
+            <el-option label="CSDN" value="CSDN"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="GitHub" :label-width="formLabelWidth">
-          <el-input v-model="form.social_account_github" placeholder="请输入新的GitHub帐号" autocomplete="off"></el-input>
+        <el-form-item v-if="form.social_account_type==='QQ'"
+                      label="旧账户" :label-width="formLabelWidth">
+          <el-input placeholder="请输入内容" v-model="form.qq" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="Gitee" :label-width="formLabelWidth">
-          <el-input v-model="form.social_account_gitee" placeholder="请输入新的Gitee帐号" autocomplete="off"></el-input>
+        <el-form-item v-if="form.social_account_type==='QQ'" v-model="form.social_account_qq"
+                      label="新的QQ帐号" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_qq" placeholder="请输入新的QQ帐号"></el-input>
         </el-form-item>
-        <el-form-item label="CSDN" :label-width="formLabelWidth">
-          <el-input v-model="form.social_account_csdn" placeholder="请输入新的CSDN帐号" autocomplete="off"></el-input>
+        <el-form-item v-if="form.social_account_type==='GitHub'"
+                      label="旧账户" :label-width="formLabelWidth">
+          <el-input placeholder="请输入内容" v-model="form.github" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item v-if="form.social_account_type==='GitHub'" v-model="form.social_account_github"
+                      label="新的GitHub账户" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_github" placeholder="请输入新的GitHub账户地址"></el-input>
+        </el-form-item>
+        <el-form-item v-if="form.social_account_type==='Gitee'"
+                      label="旧账户" :label-width="formLabelWidth">
+          <el-input placeholder="请输入内容" v-model="form.gitee" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item v-if="form.social_account_type==='Gitee'" v-model="form.social_account_gitee"
+                      label="新的Gitee账户" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_gitee" placeholder="请输入新的Gitee账户地址"></el-input>
+        </el-form-item>
+        <el-form-item v-if="form.social_account_type==='CSDN'"
+                      label="旧账户" :label-width="formLabelWidth">
+          <el-input placeholder="请输入内容" v-model="form.csdn" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item v-if="form.social_account_type==='CSDN'" v-model="form.social_account_csdn"
+                      label="新的CSDN账户" :label-width="formLabelWidth">
+          <el-input v-model="form.social_account_csdn" placeholder="请输入新的CSDN账户地址"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible3 = false">取 消</el-button>
-        <el-button type="primary" @click="fetchToUpdatePwd">确 定</el-button>
+        <el-button type="primary" @click="fetchToUpdateSocialAccount">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -111,7 +160,18 @@
 
 <script>
 import HeaderSearch from '@/components/header-search'
-import {fetchCategory, fetchIsLogin, fetchLogOut} from '../../api'
+import {
+  fetchCategory,
+  fetchIsLogin,
+  fetchLogOut,
+  fetchToUpdateMotto,
+  fetchToUpdateSocialAccountQQ,
+  fetchToUpdateSocialAccountGithub,
+  fetchToUpdateSocialAccountGitee,
+  fetchToUpdateSocialAccountCSDN,
+  fetchToUpdateEmail,
+  fetchUpdatePwd
+} from '../../api'
 
 export default {
   name: "layout-header",
@@ -128,8 +188,13 @@ export default {
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
+      dialogFormVisible4: false,
       form: {
-        email: localStorage.getItem('email') ? localStorage.getItem('email') : '请输入邮箱！',
+        email: JSON.parse(localStorage.getItem('userinfo')).email ? JSON.parse(localStorage.getItem('userinfo')).email : '请输入邮箱！',
+        qq: JSON.parse(localStorage.getItem('userinfo')).qq ? JSON.parse(localStorage.getItem('userinfo')).qq : '数据为空！',
+        github: JSON.parse(localStorage.getItem('userinfo')).github ? JSON.parse(localStorage.getItem('userinfo')).github : '数据为空！',
+        gitee: JSON.parse(localStorage.getItem('userinfo')).gitee ? JSON.parse(localStorage.getItem('userinfo')).gitee : '数据为空！',
+        csdn: JSON.parse(localStorage.getItem('userinfo')).csdn ? JSON.parse(localStorage.getItem('userinfo')).csdn : '数据为空！',
         type: [],
         password: '',
         ensure_password: '',
@@ -138,6 +203,8 @@ export default {
         social_account_github: '',
         social_account_gitee: '',
         social_account_csdn: '',
+        social_account_type: '',
+        social_account: ''
       },
       formLabelWidth: '120px'
     }
@@ -177,10 +244,8 @@ export default {
       })
     },
     fetchIsLogin() {
-      let data = {
-        token: localStorage.getItem('token')
-      }
-      fetchIsLogin(data).then(res => {
+        let token = localStorage.getItem('token')
+      fetchIsLogin(token).then(res => {
         this.is_login = res.data.data.is_login
         console.log("-----", this.is_login, res.data.data.is_login)
       }).catch(err => {
@@ -189,13 +254,12 @@ export default {
     },
     fetchTo(command) {
       if (command === 'logout') {
-        let data = {
-          token: localStorage.getItem('token')
-        }
-        fetchLogOut(data).then(res => {
+        let token = localStorage.getItem('token')
+        fetchLogOut(token).then(res => {
           console.log(res)
           localStorage.removeItem('token')
           localStorage.removeItem('is_login')
+          localStorage.removeItem('email')
           this.is_login = false
           this.$router.push({path: '/'})
         }).catch(err => {
@@ -207,21 +271,205 @@ export default {
         this.dialogFormVisible2 = true
       } else if (command === 'update_social_account') {
         this.dialogFormVisible3 = true
+      } else if (command === 'update_email') {
+        this.dialogFormVisible4 = true
       }
     },
     fetchToUpdatePwd() {
+      // 判断密码是否过于简单，要求八位以上，且包含数字和字母
+      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,}$/
+      if (!reg.test(this.form.password)) {
+        this.$message({
+          message: '密码过于简单，要求八位以上且包含数字和字母！',
+          type: 'warning'
+        })
+        return
+      }
+
+      if (this.form.password !== this.form.ensure_password) {
+        this.$message({
+          message: '两次输入的密码不一致，请重新输入！',
+          type: 'warning'
+        })
+        return
+      }
+
+      let data = {
+        new_password: this.form.password,
+      }
+      fetchUpdatePwd(data, localStorage.getItem('token')).then(res => {
+        console.log(res)
+        this.dialogFormVisible = false
+        if (res.data.code === 200) {
+          this.$message({
+            message: '密码修改成功！',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '密码修改失败！',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+      this.dialogFormVisible = false
+    },
+    fetchToUpdateMotto() {
+      if (this.form.motto === "") {
+        this.$message({
+          message: '个性签名不能为空！',
+          type: 'warning'
+        })
+        return
+      }
+
+      let data = {
+        motto: this.form.motto,
+      }
+      fetchToUpdateMotto(data, localStorage.getItem('token')).then(res => {
+        console.log(res)
+        this.dialogFormVisible2 = false
+        if (res.data.code === 200) {
+          this.$message({
+            message: '个性签名修改成功！',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '个性签名修改失败！',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+      this.dialogFormVisible2 = false
+    },
+    fetchToUpdateEmail() {
+      if (this.form.email === "") {
+        this.$message({
+          message: '邮箱不能为空！',
+          type: 'warning'
+        })
+        return
+      }
+      let reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!reg.test(this.form.email)) {
+        this.$message({
+          message: '邮箱格式不正确！',
+          type: 'warning'
+        })
+        return
+      }
+
       let data = {
         email: this.form.email,
-        password: this.form.password,
-        token: localStorage.getItem('token')
       }
-      // fetchUpdatePwd(data).then(res => {
-      //   console.log(res)
-      //   this.dialogFormVisible = false
-      // }).catch(err => {
-      //   console.log(err)
-      // })
-      this.dialogFormVisible = false
+      fetchToUpdateEmail(data, localStorage.getItem('token')).then(res => {
+        console.log(res)
+        this.dialogFormVisible4 = false
+        if (res.data.code === 200) {
+          this.$message({
+            message: '邮箱修改成功！',
+            type: 'success'
+          })
+          localStorage.setItem('email', this.form.email)
+        } else {
+          this.$message({
+            message: '邮箱修改失败！',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+      this.dialogFormVisible4 = false
+    },
+    fetchToUpdateSocialAccount() {
+      if (this.form.social_account_type === "") {
+        this.$message({
+          message: '请选择社交账号类型！',
+          type: 'warning'
+        })
+        return
+      }
+      if (this.form.social_account_type === "QQ") {
+        let reg = /^[1-9][0-9]{4,}$/
+        if (!reg.test(this.form.social_account_qq)) {
+          this.$message({
+            message: 'QQ号格式不正确！',
+            type: 'warning'
+          })
+          return
+        }
+        let data = {
+          qq: this.form.social_account_qq,
+        }
+        this.methodToSelectSocialAccountToServer(data, 'QQ', fetchToUpdateSocialAccountQQ)
+      } else if (this.form.social_account_type === "GitHub") {
+        // 判断是不是github用户页面的url
+        let reg = /^https:\/\/github.com\/[a-zA-Z0-9_-]+$/;
+        if (!reg.test(this.form.social_account_github)) {
+          this.$message({
+            message: 'GitHub用户url格式不正确！',
+            type: 'warning'
+          })
+          return
+        }
+        let data = {
+          github: this.form.social_account_github,
+        }
+        this.methodToSelectSocialAccountToServer(data, 'GitHub', fetchToUpdateSocialAccountGithub)
+      } else if (this.form.social_account_type === "Gitee") {
+        // 判断是不是gitee用户页面的url
+        let reg = /^https:\/\/gitee.com\/[a-zA-Z0-9_-]+$/;
+        if (!reg.test(this.form.social_account_gitee)) {
+          this.$message({
+            message: 'Gitee用户url格式不正确！',
+            type: 'warning'
+          })
+          return
+        }
+        let data = {
+          gitee: this.form.social_account_gitee,
+        }
+        this.methodToSelectSocialAccountToServer(data, 'Gitee', fetchToUpdateSocialAccountGitee)
+      } else if (this.form.social_account_type === "CSDN") {
+        // 判断是不是csdn用户页面的url
+        let reg = /^https:\/\/blog.csdn.net\/[a-zA-Z0-9_-]+$/;
+        if (!reg.test(this.form.social_account_csdn)) {
+          this.$message({
+            message: 'CSDN用户url格式不正确！',
+            type: 'warning'
+          })
+          return
+        }
+        let data = {
+          csdn: this.form.social_account_csdn,
+        }
+        this.methodToSelectSocialAccountToServer(data, 'CSDN', fetchToUpdateSocialAccountCSDN)
+      }
+    },
+    methodToSelectSocialAccountToServer(data, account_type, func) {
+      func(data, localStorage.getItem('token')).then(res => {
+        console.log(res)
+        this.dialogFormVisible3 = false
+        if (res.data.code === 200) {
+          this.$message({
+            message: account_type + '社交账号修改成功！',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: account_type + '社交账号修改失败！',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }

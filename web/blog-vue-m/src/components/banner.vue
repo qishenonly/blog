@@ -16,7 +16,7 @@
 
           <div class="top-social">
             <div title="QQ">
-              <a style="color: rgb(26, 182, 255);">
+              <a style="color: rgb(26, 182, 255);" @click="getQQ">
                 <i class="iconfont iconqq"></i>
               </a>
             </div>
@@ -84,16 +84,28 @@ export default {
       })
     },
     getUserInfo() {
-      let data = {
-        token: localStorage.getItem('token')
-      }
-      fetchUserInfo(data).then(res => {
+        let token = localStorage.getItem('token')
+      fetchUserInfo(token).then(res => {
         this.response = res.data.data || []
-        localStorage.setItem('email', this.response.email)
+        // localStorage.setItem('email', this.response.email)
+        localStorage.setItem('userinfo', JSON.stringify(this.response))
         // localStorage.setItem('is_login', this.response.is_login)
       }).catch(err => {
         console.log(err)
       })
+    },
+    getQQ() {
+      const h = this.$createElement;
+      this.$msgbox({
+        title: 'QQ账户',
+        message: h('p', null, [
+          h('i', { style: 'color: teal' }, JSON.parse(localStorage.getItem('userinfo')).qq + '\n'),
+          h('span', null, '请复制到QQ添加好友！ '),
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      });
     }
   }
 }
