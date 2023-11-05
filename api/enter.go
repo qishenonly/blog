@@ -6,6 +6,7 @@ import (
 	"github.com/qishenonly/blog/api/home"
 	"github.com/qishenonly/blog/api/image"
 	"github.com/qishenonly/blog/api/setting"
+	"github.com/qishenonly/blog/api/uploads"
 	"github.com/qishenonly/blog/api/user"
 )
 
@@ -27,6 +28,9 @@ type ApiGroup struct {
 
 	// ImageApi 是一个 ImageApi 类型的变量，用来调用 image 包中的方法
 	ImageApi image.ImageApi
+
+	// UploadApi 是一个 UploadApi 类型的变量，用来调用 upload 包中的方法
+	UploadApi uploads.UploadApi
 }
 
 // NewApiGroup 是一个 ApiGroup 类型的函数，用来初始化 ApiGroup 结构体
@@ -38,5 +42,6 @@ func NewApiGroup() ApiGroup {
 		ArticleApi: article.ArticleApi{},
 		UserApi:    user.UserApi{},
 		ImageApi:   image.ImageApi{},
+		UploadApi:  uploads.UploadApi{},
 	}
 }

@@ -46,6 +46,9 @@ func InitRouter() *gin.Engine {
 	// Image 路由组
 	routerGroup.InitImageRouter()
 
+	// Upload 路由组
+	routerGroup.InitUploadRouter()
+
 	return router
 
 }

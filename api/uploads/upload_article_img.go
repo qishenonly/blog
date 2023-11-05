@@ -1,4 +1,4 @@
-package image
+package uploads
 
 import (
 	"io/ioutil"
@@ -14,13 +14,30 @@ import (
 // UploadArticleImage godoc
 // @Summary 上传文章图片
 // @Description 上传文章图片
-// @Tags Image
+// @Tags Upload
 // @Accept multipart/form-data
 // @Produce json
 // @Param file formData file true "文件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /image/upload_article_image [post]
-func (ia *ImageApi) UploadArticleImage(c *gin.Context) {
+func (ua *UploadApi) UploadArticleImage(c *gin.Context) {
+	ua.uploadImage("image/article/", c)
+}
+
+// UploadArticleCoverImage godoc
+// @Summary 上传文章封面图片
+// @Description 上传文章封面图片
+// @Tags Upload
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "文件"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
+// @Router /image/upload_article_cover_image [post]
+func (ua *UploadApi) UploadArticleCoverImage(c *gin.Context) {
+	ua.uploadImage("image/article_cover/", c)
+}
+
+func (ua *UploadApi) uploadImage(path string, c *gin.Context) {
 	file, err := c.FormFile("file") // "file" 对应表单中的文件字段名
 	if err != nil {
 		global.Logger.Error("获取文件失败", err)
@@ -53,7 +70,7 @@ func (ia *ImageApi) UploadArticleImage(c *gin.Context) {
 
 	// 保存文件为图片
 	fileName := utils.RandString(10) + "_" + file.Filename
-	destinationPath := "upload/image/article/" + fileName
+	destinationPath := "upload/" + path + fileName
 	err = os.WriteFile(destinationPath, data, 0644)
 	if err != nil {
 		global.Logger.Error("保存文件失败", err)
