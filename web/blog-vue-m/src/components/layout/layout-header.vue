@@ -40,9 +40,7 @@
             <el-dropdown-item>
               <router-link to="/user">主页</router-link>
             </el-dropdown-item>
-            <el-dropdown-item>
-              <router-link to="/user/write_article">写文章</router-link>
-            </el-dropdown-item>
+            <el-dropdown-item command="pathToWriteArticle">写文章</el-dropdown-item>
             <el-dropdown-item command="update_pwd">修改密码</el-dropdown-item>
 <!--            <el-dropdown-item command="update_email">修改邮箱</el-dropdown-item>-->
             <el-dropdown-item command="update_motto">修改个性签名</el-dropdown-item>
@@ -253,13 +251,16 @@ export default {
       })
     },
     fetchTo(command) {
+      if (JSON.parse(localStorage.getItem('userinfo')).email === '请输入邮箱！') {
+        window.location.reload()
+      }
       if (command === 'logout') {
         let token = localStorage.getItem('token')
         fetchLogOut(token).then(res => {
           console.log(res)
           localStorage.removeItem('token')
           localStorage.removeItem('is_login')
-          localStorage.removeItem('email')
+          localStorage.removeItem('userinfo')
           this.is_login = false
           this.$router.push({path: '/'})
         }).catch(err => {
@@ -273,6 +274,13 @@ export default {
         this.dialogFormVisible3 = true
       } else if (command === 'update_email') {
         this.dialogFormVisible4 = true
+      } else if (command === 'pathToWriteArticle') {
+        this.$router.push({
+          name: 'write_article',
+          params: {
+            email: this.form.email,
+          }
+        });
       }
     },
     fetchToUpdatePwd() {

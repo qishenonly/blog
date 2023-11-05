@@ -56,6 +56,7 @@
 
 <script>
 import {fetchLogin, fetchLoginCode, fetchRegister, fetchResetPwd} from '../api'
+import router from "@/router";
 export default {
   data() {
     return {

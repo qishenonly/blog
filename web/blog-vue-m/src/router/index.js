@@ -59,6 +59,13 @@ const routes = [
         component: () => import('../views/ResetPwd.vue'),
         meta: {title: '重置密码'},
         props: true,
+    },
+    {
+        path: '/user/:email/write_article',
+        name: 'write_article',
+        component: () => import('../views/WriteArticle.vue'),
+        meta: {title: '写文章'},
+        props: true,
     }
 ]
 

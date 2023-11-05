@@ -118,6 +118,20 @@ export function fetchToUpdateEmail(data, token) {
     })
 }
 
+export function fetchUploadArticleImage(file, token) {
+    const formData = new FormData();
+    formData.append('file', file); // 将文件添加到 FormData 中
+
+    return request({
+        url: '/image/upload_article_image',
+        method: 'post',
+        headers: {
+            'Authorization': token // 将 Token 添加到 Authorization 头部
+        },
+        data: formData, // 使用 FormData 作为请求的数据
+    });
+}
+
 export function fetchArticle(id) {
     return request({
         url: `/article/detail/${id}`,
@@ -223,4 +237,5 @@ export function fetchResetPwdCode() {
         method: 'get',
     })
 }
+
 
