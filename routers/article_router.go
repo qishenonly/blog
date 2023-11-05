@@ -14,7 +14,4 @@ func (router RouterGroup) InitArticleRouter() {
 	// 文章详情
 	router.GET("/article/detail/:id", articleApi.GetArticle)
 
-	// 上传图片
-	router.POST("/article/upload_article_image", articleApi.UploadArticleImage)
-
 }

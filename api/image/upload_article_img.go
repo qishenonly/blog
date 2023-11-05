@@ -1,11 +1,12 @@
-package article
+package image
 
 import (
-	"github.com/qishenonly/blog/global"
-	"github.com/qishenonly/blog/utils"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/qishenonly/blog/global"
+	"github.com/qishenonly/blog/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,13 +14,13 @@ import (
 // UploadArticleImage godoc
 // @Summary 上传文章图片
 // @Description 上传文章图片
-// @Tags 文章
+// @Tags Image
 // @Accept multipart/form-data
 // @Produce json
 // @Param file formData file true "文件"
-// @Success 200 {object} _ResponseSuccess
-// @Router /article/upload_image [post]
-func (aa *ArticleApi) UploadArticleImage(c *gin.Context) {
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
+// @Router /image/upload_article_image [post]
+func (ia *ImageApi) UploadArticleImage(c *gin.Context) {
 	file, err := c.FormFile("file") // "file" 对应表单中的文件字段名
 	if err != nil {
 		global.Logger.Error("获取文件失败", err)

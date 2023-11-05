@@ -3,3 +3,4 @@ settings.yaml
 tmp/
 .air.toml
 cache_data/
+upload/
