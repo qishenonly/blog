@@ -20,27 +20,27 @@ var oauthConf = &oauth2.Config{
 }
 
 // AuthGithub godoc
-// @Summary Github授权
-// @Description Github授权
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Success 302 {string} string "{"success":true,"data":{},"msg":"授权成功"}"
-// @Router /auth/github [get]
+//	@Summary		Github授权
+//	@Description	Github授权
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		302	{string}	string	"{"success":true,"data":{},"msg":"授权成功"}"
+//	@Router			/auth/github [get]
 func (aa *AuthApi) AuthGithub(c *gin.Context) {
 	url := oauthConf.AuthCodeURL(oauthStateString)
 	c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
 // AuthGithubCallback godoc
-// @Summary Github授权回调
-// @Description Github授权回调
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Param state query string true "state"
-// @Param code query string true "code"
-// @Success 302 {string} string "{"success":true,"data":{},"msg":"授权成功"}"
+//	@Summary		Github授权回调
+//	@Description	Github授权回调
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			state	query		string	true	"state"
+//	@Param			code	query		string	true	"code"
+//	@Success		302		{string}	string	"{"success":true,"data":{},"msg":"授权成功"}"
 func (aa *AuthApi) AuthGithubCallback(c *gin.Context) {
 	state := c.Query("state")
 	if state != oauthStateString {

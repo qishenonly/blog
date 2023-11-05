@@ -31,13 +31,13 @@ type LoginUserResponse struct {
 }
 
 // GetUserInfo godoc
-// @Summary 获取用户信息
-// @Description 获取用户信息
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /user/info [get]
+//	@Summary		获取用户信息
+//	@Description	获取用户信息
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"获取成功"}"
+//	@Router			/user/info [get]
 func (ua *UserApi) GetUserInfo(c *gin.Context) {
 	// 游客状态未登录
 	token := c.GetHeader("Authorization")

@@ -13,15 +13,15 @@ import (
 )
 
 // Verify godoc
-// @Summary 激活账号
-// @Description 激活账号
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Param token path string true "激活码"
-// @Param email path string true "邮箱"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"激活成功"}"
-// @Router /auth/verify/{token}/active/{email} [get]
+//	@Summary		激活账号
+//	@Description	激活账号
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			token	path		string	true	"激活码"
+//	@Param			email	path		string	true	"邮箱"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"激活成功"}"
+//	@Router			/auth/verify/{token}/active/{email} [get]
 func (va *AuthApi) Verify(c *gin.Context) {
 	email := c.Param("email")
 
@@ -84,15 +84,15 @@ func (va *AuthApi) Verify(c *gin.Context) {
 }
 
 // VerifyResetPwd godoc
-// @Summary 激活重置密码token
-// @Description 激活重置密码token
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Param token path string true "激活码"
-// @Param email path string true "邮箱"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"激活成功"}"
-// @Router /auth/verify/{token}/reset_pwd/{email} [get]
+//	@Summary		激活重置密码token
+//	@Description	激活重置密码token
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			token	path		string	true	"激活码"
+//	@Param			email	path		string	true	"邮箱"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"激活成功"}"
+//	@Router			/auth/verify/{token}/reset_pwd/{email} [get]
 func (va *AuthApi) VerifyResetPwd(c *gin.Context) {
 	email := c.Param("email")
 

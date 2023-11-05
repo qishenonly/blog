@@ -21,13 +21,13 @@ type Article struct {
 }
 
 // Faker godoc
-// @Summary 生成文章数据
-// @Description 生成文章数据
-// @Tags Article
-// @Accept json
-// @Produce json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"生成文章数据成功"}"
-// @Router /article/faker [post]
+//	@Summary		生成文章数据
+//	@Description	生成文章数据
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"生成文章数据成功"}"
+//	@Router			/article/faker [post]
 func (aa *ArticleApi) Faker(c *gin.Context) {
 	var article Article
 

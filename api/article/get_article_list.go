@@ -27,15 +27,15 @@ type PageInfo struct {
 }
 
 // GetArticleList godoc
-// @Summary 获取文章列表
-// @Description 获取文章列表
-// @Tags Article
-// @Accept json
-// @Produce json
-// @Param page body int true "页码"
-// @Param page_size body int true "每页数量"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /article/list [post]
+//	@Summary		获取文章列表
+//	@Description	获取文章列表
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Param			page		body		int		true	"页码"
+//	@Param			page_size	body		int		true	"每页数量"
+//	@Success		200			{string}	string	"{"success":true,"data":{},"msg":"获取成功"}"
+//	@Router			/article/list [post]
 func (aa *ArticleApi) GetArticleList(c *gin.Context) {
 	// 查询文章，按点赞数倒序排列，十条数据为一页
 	var request PageInfo

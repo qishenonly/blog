@@ -12,27 +12,27 @@ import (
 )
 
 // UploadArticleImage godoc
-// @Summary 上传文章图片
-// @Description 上传文章图片
-// @Tags Upload
-// @Accept multipart/form-data
-// @Produce json
-// @Param file formData file true "文件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
-// @Router /image/upload_article_image [post]
+//	@Summary		上传文章图片
+//	@Description	上传文章图片
+//	@Tags			Upload
+//	@Accept			multipart/form-data
+//	@Produce		json
+//	@Param			file	formData	file	true	"文件"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"上传成功"}"
+//	@Router			/image/upload_article_image [post]
 func (ua *UploadApi) UploadArticleImage(c *gin.Context) {
 	ua.uploadImage("image/article/", c)
 }
 
 // UploadArticleCoverImage godoc
-// @Summary 上传文章封面图片
-// @Description 上传文章封面图片
-// @Tags Upload
-// @Accept multipart/form-data
-// @Produce json
-// @Param file formData file true "文件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
-// @Router /image/upload_article_cover_image [post]
+//	@Summary		上传文章封面图片
+//	@Description	上传文章封面图片
+//	@Tags			Upload
+//	@Accept			multipart/form-data
+//	@Produce		json
+//	@Param			file	formData	file	true	"文件"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"上传成功"}"
+//	@Router			/image/upload_article_cover_image [post]
 func (ua *UploadApi) UploadArticleCoverImage(c *gin.Context) {
 	ua.uploadImage("image/article_cover/", c)
 }

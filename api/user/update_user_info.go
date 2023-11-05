@@ -15,14 +15,14 @@ type UpdateEmailRequest struct {
 }
 
 // UpdateUserEmail godoc
-// @Summary 更新用户邮箱
-// @Description 更新用户邮箱
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param email body string true "email"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户邮箱成功"}"
-// @Router /user/update_email [post]
+//	@Summary		更新用户邮箱
+//	@Description	更新用户邮箱
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			email	body		string	true	"email"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"更新用户邮箱成功"}"
+//	@Router			/user/update_email [post]
 func (ua *UserApi) UpdateUserEmail(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdateEmailRequest
@@ -86,14 +86,14 @@ type UpdatePwdRequest struct {
 }
 
 // UpdateUserPassword godoc
-// @Summary 修改密码
-// @Description 修改密码
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param new_password body string true "new_password"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户密码成功！"}"
-// @Router /user/update_password [post]
+//	@Summary		修改密码
+//	@Description	修改密码
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			new_password	body		string	true	"new_password"
+//	@Success		200				{string}	string	"{"success":true,"data":{},"msg":"更新用户密码成功！"}"
+//	@Router			/user/update_password [post]
 func (ua *UserApi) UpdateUserPassword(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdatePwdRequest
@@ -166,14 +166,14 @@ type UpdateMottoRequest struct {
 }
 
 // UpdateUserMotto godoc
-// @Summary 修改用户motto
-// @Description 修改用户motto
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param motto body string true "motto"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户motto成功！"}"
-// @Router /user/update_motto [post]
+//	@Summary		修改用户motto
+//	@Description	修改用户motto
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			motto	body		string	true	"motto"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"更新用户motto成功！"}"
+//	@Router			/user/update_motto [post]
 func (ua *UserApi) UpdateUserMotto(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdateMottoRequest
@@ -230,14 +230,14 @@ type UpdateSocialAccountQQRequest struct {
 }
 
 // UpdateUserSocialAccountQQ godoc
-// @Summary 修改用户社交账号
-// @Description 修改用户社交账号
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param qq body string true "qq"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
-// @Router /user/update_social_account_qq [post]
+//	@Summary		修改用户社交账号
+//	@Description	修改用户社交账号
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			qq	body		string	true	"qq"
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+//	@Router			/user/update_social_account_qq [post]
 func (ua *UserApi) UpdateUserSocialAccountQQ(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdateSocialAccountQQRequest
@@ -294,14 +294,14 @@ type UpdateSocialAccountGithubRequest struct {
 }
 
 // UpdateUserSocialAccountGitHub godoc
-// @Summary 修改用户社交账号
-// @Description 修改用户社交账号
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param github body string true "github"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
-// @Router /user/update_social_account_github [post]
+//	@Summary		修改用户社交账号
+//	@Description	修改用户社交账号
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			github	body		string	true	"github"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+//	@Router			/user/update_social_account_github [post]
 func (ua *UserApi) UpdateUserSocialAccountGitHub(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdateSocialAccountGithubRequest
@@ -358,14 +358,14 @@ type UpdateSocialAccountGiteeRequest struct {
 }
 
 // UpdateUserSocialAccountGitee godoc
-// @Summary 修改用户社交账号
-// @Description 修改用户社交账号
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param github body string true "gitee"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
-// @Router /user/update_social_account_gitee [post]
+//	@Summary		修改用户社交账号
+//	@Description	修改用户社交账号
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			github	body		string	true	"gitee"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+//	@Router			/user/update_social_account_gitee [post]
 func (ua *UserApi) UpdateUserSocialAccountGitee(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdateSocialAccountGiteeRequest
@@ -422,14 +422,14 @@ type UpdateSocialAccountCSDNRequest struct {
 }
 
 // UpdateUserSocialAccountCSDN godoc
-// @Summary 修改用户社交账号
-// @Description 修改用户社交账号
-// @Tags User
-// @Accept  application/json
-// @Produce  application/json
-// @Param github body string true "csdn"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
-// @Router /user/update_social_account_csdn [post]
+//	@Summary		修改用户社交账号
+//	@Description	修改用户社交账号
+//	@Tags			User
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			github	body		string	true	"csdn"
+//	@Success		200		{string}	string	"{"success":true,"data":{},"msg":"更新用户社交账号成功！"}"
+//	@Router			/user/update_social_account_csdn [post]
 func (ua *UserApi) UpdateUserSocialAccountCSDN(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	var request UpdateSocialAccountCSDNRequest

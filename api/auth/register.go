@@ -17,17 +17,17 @@ type Register struct {
 }
 
 // Register godoc
-// @Summary 注册
-// @Description 注册
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Param username body string true "username"
-// @Param password body string true "password"
-// @Param email body string true "email"
-// @Param code body string true "code"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
-// @Router /auth/register [post]
+//	@Summary		注册
+//	@Description	注册
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			username	body		string	true	"username"
+//	@Param			password	body		string	true	"password"
+//	@Param			email		body		string	true	"email"
+//	@Param			code		body		string	true	"code"
+//	@Success		200			{string}	string	"{"success":true,"data":{},"msg":"注册成功"}"
+//	@Router			/auth/register [post]
 func (ra *AuthApi) Register(c *gin.Context) {
 	var request Register
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -101,13 +101,13 @@ func (ra *AuthApi) Register(c *gin.Context) {
 }
 
 // RegisterCode godoc
-// @Summary 注册验证码
-// @Description 注册验证码
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册验证码！请在5分钟内使用！"}"
-// @Router /auth/register/code [get]
+//	@Summary		注册验证码
+//	@Description	注册验证码
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"注册验证码！请在5分钟内使用！"}"
+//	@Router			/auth/register/code [get]
 func (ra *AuthApi) RegisterCode(c *gin.Context) {
 	code := utils.RandCode(4)
 	registerCode := []byte("register_code_" + code)

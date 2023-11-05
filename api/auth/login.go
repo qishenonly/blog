@@ -17,16 +17,16 @@ type Login struct {
 }
 
 // Login godoc
-// @Summary 登录
-// @Description 登录
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Param email body string true "email"
-// @Param password body string true "password"
-// @Param code body string true "code"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"登录成功"}"
-// @Router /auth/login [post]
+//	@Summary		登录
+//	@Description	登录
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Param			email		body		string	true	"email"
+//	@Param			password	body		string	true	"password"
+//	@Param			code		body		string	true	"code"
+//	@Success		200			{string}	string	"{"success":true,"data":{},"msg":"登录成功"}"
+//	@Router			/auth/login [post]
 func (la *AuthApi) Login(c *gin.Context) {
 	var request Login
 	if err := c.ShouldBind(&request); err != nil {
@@ -126,13 +126,13 @@ func (la *AuthApi) Login(c *gin.Context) {
 }
 
 // LoginCode godoc
-// @Summary 登录验证码
-// @Description 登录验证码
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"登录验证码"}"
-// @Router /auth/login/code [get]
+//	@Summary		登录验证码
+//	@Description	登录验证码
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"登录验证码"}"
+//	@Router			/auth/login/code [get]
 func (la *AuthApi) LoginCode(c *gin.Context) {
 	code := utils.RandCode(4)
 	loginCode := []byte("login_code_" + code)
@@ -152,13 +152,13 @@ type Response struct {
 }
 
 // IsLogin godoc
-// @Summary 判断是否登录
-// @Description 判断是否登录
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"判断是否登录"}"
-// @Router /auth/islogin [get]
+//	@Summary		判断是否登录
+//	@Description	判断是否登录
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"判断是否登录"}"
+//	@Router			/auth/islogin [get]
 func (la *AuthApi) IsLogin(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	if token == "" {
@@ -209,13 +209,13 @@ func (la *AuthApi) IsLogin(c *gin.Context) {
 }
 
 // LogOut godoc
-// @Summary 退出登录
-// @Description 退出登录
-// @Tags Auth
-// @Accept  application/json
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"退出登录成功"}"
-// @Router /auth/logout [post]
+//	@Summary		退出登录
+//	@Description	退出登录
+//	@Tags			Auth
+//	@Accept			application/json
+//	@Produce		application/json
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"退出登录成功"}"
+//	@Router			/auth/logout [post]
 func (la *AuthApi) LogOut(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	if token == "" {

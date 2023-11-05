@@ -45,14 +45,14 @@ type CommentInfo struct {
 }
 
 // GetArticle godoc
-// @Summary 获取文章
-// @Description 获取文章
-// @Tags Article
-// @Accept json
-// @Produce json
-// @Param id path int true "文章ID"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /article/{id} [get]
+//	@Summary		获取文章
+//	@Description	获取文章
+//	@Tags			Article
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int		true	"文章ID"
+//	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"获取成功"}"
+//	@Router			/article/{id} [get]
 func (aa *ArticleApi) GetArticle(c *gin.Context) {
 	id := c.Param("id")
 	var article models.ArticleModel

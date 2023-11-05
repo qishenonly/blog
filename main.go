@@ -8,11 +8,11 @@ import (
 	"github.com/qishenonly/blog/routers"
 )
 
-// @title Gin-Blog API 文档
-// @description Gin-Blog API 文档
-// @version 0.1
-// @host localhost:8080
-// @BasePath /api/v1
+//	@title			Gin-Blog API 文档
+//	@description	Gin-Blog API 文档
+//	@version		0.1
+//	@host			localhost:8080
+//	@BasePath		/api/v1
 func main() {
 	// 读取配置文件
 	core.InitCnf()

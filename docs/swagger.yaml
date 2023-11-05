@@ -85,6 +85,21 @@ paths:
       summary: Github授权
       tags:
       - Auth
+  /auth/islogin:
+    get:
+      consumes:
+      - application/json
+      description: 判断是否登录
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"判断是否登录"}'
+          schema:
+            type: string
+      summary: 判断是否登录
+      tags:
+      - Auth
   /auth/login:
     post:
       consumes:
@@ -132,6 +147,21 @@ paths:
           schema:
             type: string
       summary: 登录验证码
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: 退出登录
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"退出登录成功"}'
+          schema:
+            type: string
+      summary: 退出登录
       tags:
       - Auth
   /auth/register:
@@ -289,4 +319,236 @@ paths:
       summary: 激活重置密码token
       tags:
       - Auth
+  /image/get_upload_image/{img_name}:
+    get:
+      consumes:
+      - application/json
+      description: 获取图片
+      parameters:
+      - description: 图片名称
+        in: path
+        name: img_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 图片
+          schema:
+            type: string
+      summary: 获取图片
+      tags:
+      - 图片
+  /image/upload_article_cover_image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传文章封面图片
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"上传成功"}'
+          schema:
+            type: string
+      summary: 上传文章封面图片
+      tags:
+      - Upload
+  /image/upload_article_image:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传文章图片
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"上传成功"}'
+          schema:
+            type: string
+      summary: 上传文章图片
+      tags:
+      - Upload
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      summary: 获取用户信息
+      tags:
+      - User
+  /user/update_email:
+    post:
+      consumes:
+      - application/json
+      description: 更新用户邮箱
+      parameters:
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户邮箱成功"}'
+          schema:
+            type: string
+      summary: 更新用户邮箱
+      tags:
+      - User
+  /user/update_motto:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户motto
+      parameters:
+      - description: motto
+        in: body
+        name: motto
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户motto成功！"}'
+          schema:
+            type: string
+      summary: 修改用户motto
+      tags:
+      - User
+  /user/update_password:
+    post:
+      consumes:
+      - application/json
+      description: 修改密码
+      parameters:
+      - description: new_password
+        in: body
+        name: new_password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户密码成功！"}'
+          schema:
+            type: string
+      summary: 修改密码
+      tags:
+      - User
+  /user/update_social_account_csdn:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户社交账号
+      parameters:
+      - description: csdn
+        in: body
+        name: github
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户社交账号成功！"}'
+          schema:
+            type: string
+      summary: 修改用户社交账号
+      tags:
+      - User
+  /user/update_social_account_gitee:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户社交账号
+      parameters:
+      - description: gitee
+        in: body
+        name: github
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户社交账号成功！"}'
+          schema:
+            type: string
+      summary: 修改用户社交账号
+      tags:
+      - User
+  /user/update_social_account_github:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户社交账号
+      parameters:
+      - description: github
+        in: body
+        name: github
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户社交账号成功！"}'
+          schema:
+            type: string
+      summary: 修改用户社交账号
+      tags:
+      - User
+  /user/update_social_account_qq:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户社交账号
+      parameters:
+      - description: qq
+        in: body
+        name: qq
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新用户社交账号成功！"}'
+          schema:
+            type: string
+      summary: 修改用户社交账号
+      tags:
+      - User
 swagger: "2.0"
