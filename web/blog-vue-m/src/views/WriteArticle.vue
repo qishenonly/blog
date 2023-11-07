@@ -72,11 +72,23 @@
         <div v-html="str" class="ql-editor">
           {{ str }}
         </div></div>
+      <div class="button_container">
+        <span class="span_content">选择按钮:</span>
+        <el-button
+            type="primary"
+            @click="onSubmit"
+        >发表</el-button>
+        <el-button
+            type="danger"
+            @click="onReset"
+        >重置</el-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import {fetchToGetCateGory, fetchUploadArticleCover, fetchToCreateArticle} from '@/api'
 import { quillEditor } from 'vue-quill-editor' // 调用编辑器
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -171,6 +183,7 @@ export default {
   mounted () {
     const content = ''// 请求后台返回的内容字符串
     this.str = this.escapeStringHTML(content)
+    this.GetCateGory()
   },
   methods: {
     onEditorReady (editor) { // 准备编辑器
@@ -219,14 +232,80 @@ export default {
         this.$message.error('只能上传一张封面')
         this.coverList.shift()
       }
-      let coverData = {
-        name : e.file.name,
-        url : 'xxxx'
-      }
-      this.coverList.push(coverData)
+      fetchUploadArticleCover(e.file, localStorage.getItem('token')).then(
+          res => {
+            console.log("上传封面成功", res)
+            let coverData = {
+              name : e.file.name,
+              url : res.data.data.path
+            }
+            this.coverList.push(coverData)
+          }
+      ).catch(
+          err => {
+            console.log("上传封面失败", err)
+          }
+      )
+
 
     },
+    GetCateGory() {
+      fetchToGetCateGory().then(
+        res => {
+          console.log("获取分类成功", res)
+          this.categoryList = res.data.data
+        }
+      ).catch(
+        err => {
+          console.log("获取分类失败", err)
+        }
+      )
+    },
+    async onSubmit() {
+      console.log("提交", this.coverList[0].url)
+      if (this.coverList.length === 0) {
+        this.$message.error('请上传封面')
+        return
+      }
 
+      if (this.title === '') {
+        this.$message.error('请输入标题')
+        return
+      } else if (this.content === '') {
+        this.$message.error('请输入内容')
+        return
+      } else if (this.introduction === '') {
+        this.$message.error('请输入简介')
+        return
+      } else if (this.category === '') {
+        this.$message.error('请选择分类')
+        return
+      }
+
+      let articleData = {
+        title: this.title,
+        content: this.content,
+        description: this.introduction,
+        cover_path: this.coverList[0].url,
+        category_id: this.category
+      }
+      console.log("articleData", articleData)
+      fetchToCreateArticle(articleData, localStorage.getItem("token")).then(
+          res => {
+            if (res.data.code === 200) {
+              console.log("创建文章成功", res)
+              this.$message.success('创建文章成功')
+              this.$router.push('/article/' + res.data.data.article_id)
+            } else {
+              this.$message.error(res.data.data)
+            }
+          }
+      ).catch(
+          err => {
+            console.log("创建文章失败", err)
+          }
+      )
+    },
   }
 }
 </script>
@@ -308,14 +387,17 @@ export default {
   overflow: auto;
 }
 
+.button_container {
+  margin-top: 13%;
+}
 
 /* 给文本内容加高度，滚动 */
 .quill-editor /deep/ .ql-container {
-   min-height: 800px;
+   min-height: 700px;
 }
 
 .ql-container {
-  min-height: 400px;
+  min-height: 600px;
 }
 
 .ql-snow .ql-tooltip [data-mode="link"]::before {
@@ -332,7 +414,7 @@ export default {
 }
 
 .ql-snow .ql-editor {
-  max-height: 500px;
+  max-height: 600px;
 }
 
 .ql-snow .ql-tooltip.ql-editing a.ql-action::after {

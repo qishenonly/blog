@@ -118,6 +118,13 @@ export function fetchToUpdateEmail(data, token) {
     })
 }
 
+export function fetchToGetCateGory() {
+    return request({
+        url: '/article/category',
+        method: 'get',
+    })
+}
+
 export function fetchUploadArticleImage(file, token) {
     const formData = new FormData();
     formData.append('file', file); // 将文件添加到 FormData 中
@@ -129,6 +136,31 @@ export function fetchUploadArticleImage(file, token) {
             'Authorization': token // 将 Token 添加到 Authorization 头部
         },
         data: formData, // 使用 FormData 作为请求的数据
+    });
+}
+
+export function fetchUploadArticleCover(file, token) {
+    const formData = new FormData();
+    formData.append('file', file); // 将文件添加到 FormData 中
+
+    return request({
+        url: '/upload/article_cover',
+        method: 'post',
+        headers: {
+            'Authorization': token // 将 Token 添加到 Authorization 头部
+        },
+        data: formData, // 使用 FormData 作为请求的数据
+    });
+}
+
+export function fetchToCreateArticle(data, token) {
+    return request({
+        url: '/article/write',
+        method: 'post',
+        headers: {
+            'Authorization': token // 将 Token 添加到 Authorization 头部
+        },
+        data: data,
     });
 }
 

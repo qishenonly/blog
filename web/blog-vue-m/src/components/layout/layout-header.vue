@@ -53,7 +53,7 @@
         <router-link to="/auth/login">登录</router-link>
       </div>
     </div>
-    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible" v-if="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
           <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
@@ -66,13 +66,13 @@
                     autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" v-if="dialogFormVisible">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="fetchToUpdatePwd">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改个性签名" :visible.sync="dialogFormVisible2">
+    <el-dialog title="修改个性签名" :visible.sync="dialogFormVisible2" v-if="dialogFormVisible2">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
           <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
@@ -81,13 +81,13 @@
           <el-input v-model="form.motto" placeholder="请输入新的个性签名" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" v-if="dialogFormVisible2">
         <el-button @click="dialogFormVisible2 = false">取 消</el-button>
         <el-button type="primary" @click="fetchToUpdateMotto">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改邮箱" :visible.sync="dialogFormVisible4">
+    <el-dialog title="修改邮箱" :visible.sync="dialogFormVisible4" v-if="dialogFormVisible4">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
           <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
@@ -96,13 +96,13 @@
           <el-input v-model="form.new_email" placeholder="请输入新的邮箱" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" v-if="dialogFormVisible4">
         <el-button @click="dialogFormVisible4 = false">取 消</el-button>
         <el-button type="primary" @click="fetchToUpdateEmail">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改社交帐号" :visible.sync="dialogFormVisible3">
+    <el-dialog title="修改社交帐号" :visible.sync="dialogFormVisible3" v-if="dialogFormVisible3">
       <el-form :model="form">
         <el-form-item label="注册邮箱" :label-width="formLabelWidth">
           <el-input placeholder="请输入内容" v-model="form.email" :disabled="true"></el-input>
@@ -148,7 +148,7 @@
           <el-input v-model="form.social_account_csdn" placeholder="请输入新的CSDN账户地址"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" v-if="dialogFormVisible3">
         <el-button @click="dialogFormVisible3 = false">取 消</el-button>
         <el-button type="primary" @click="fetchToUpdateSocialAccount">确 定</el-button>
       </div>
@@ -263,6 +263,10 @@ export default {
           localStorage.removeItem('userinfo')
           this.is_login = false
           this.$router.push({path: '/'})
+          this.$message({
+            message: '退出成功！',
+            type: 'success'
+          })
         }).catch(err => {
           console.log(err)
         })
