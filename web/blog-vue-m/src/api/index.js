@@ -123,7 +123,7 @@ export function fetchUploadArticleImage(file, token) {
     formData.append('file', file); // 将文件添加到 FormData 中
 
     return request({
-        url: '/image/upload_article_image',
+        url: '/upload/article_image',
         method: 'post',
         headers: {
             'Authorization': token // 将 Token 添加到 Authorization 头部

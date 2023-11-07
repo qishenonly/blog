@@ -39,7 +39,7 @@
       <div class="article_cover_container">
         <span class="span_cover">文章封面:</span>
         <el-upload
-            class="avatar-uploader"
+            class="avatar-upload"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :http-request="onUploadCoverHandler"
