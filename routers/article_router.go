@@ -14,4 +14,10 @@ func (router RouterGroup) InitArticleRouter() {
 	// 文章详情
 	router.GET("/article/detail/:id", articleApi.GetArticle)
 
+	// 文章分类
+	router.GET("/article/category", articleApi.GetArticleCategory)
+
+	// 写文章
+	router.POST("/article/write", articleApi.WriteArticle)
+
 }

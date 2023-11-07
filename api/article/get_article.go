@@ -45,6 +45,7 @@ type CommentInfo struct {
 }
 
 // GetArticle godoc
+//
 //	@Summary		获取文章
 //	@Description	获取文章
 //	@Tags			Article
@@ -52,7 +53,7 @@ type CommentInfo struct {
 //	@Produce		json
 //	@Param			id	path		int		true	"文章ID"
 //	@Success		200	{string}	string	"{"success":true,"data":{},"msg":"获取成功"}"
-//	@Router			/article/{id} [get]
+//	@Router			/article/detail/{id} [get]
 func (aa *ArticleApi) GetArticle(c *gin.Context) {
 	id := c.Param("id")
 	var article models.ArticleModel
@@ -85,12 +86,20 @@ func (aa *ArticleApi) GetArticle(c *gin.Context) {
 		}
 	}
 
+	// 获取分类
+	var category models.CategoryModel
+	if err := global.DB.Where("id = ?", article.CategoryID).First(&category).Error; err != nil {
+		global.Logger.Error("获取分类失败: ", err)
+		utils.NewFailResponse("获取分类失败", c)
+		return
+	}
+
 	articleInfo := ArticleInfo{
 		ArticleID:   article.ID,
 		Title:       article.Title,
 		Description: article.Introduction,
 		Content:     article.Content,
-		Category:    article.Category,
+		Category:    category.Name,
 		Author:      article.Author.Nickname,
 		AuthorID:    article.AuthorID,
 		Comments:    commentInfo,

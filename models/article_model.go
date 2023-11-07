@@ -33,7 +33,10 @@ type ArticleModel struct {
 	Comments []CommentModel `gorm:"foreignkey:ID;association_foreignkey:ID;" json:"comments"`
 
 	// 分类
-	Category string `gorm:"type:varchar(20);not null;default:'';comment:'分类（标签）'" json:"category"`
+	Category CategoryModel `gorm:"foreignkey:ID;association_foreignkey:ID;" json:"category"`
+
+	// 分类 ID
+	CategoryID uint `gorm:"not null;default:0;comment:'分类 ID'" json:"category_id"`
 
 	// 文章作者
 	Author UserModel `gorm:"foreignkey:AuthorID;association_foreignkey:ID;" json:"author"`
