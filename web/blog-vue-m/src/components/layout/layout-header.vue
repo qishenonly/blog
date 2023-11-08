@@ -207,11 +207,12 @@ export default {
       formLabelWidth: '120px'
     }
   },
+  watch() {
+    this.is_login = JSON.parse(localStorage.getItem('userinfo')).is_login
+  },
   mounted() {
     window.addEventListener('scroll', this.watchScroll)
     this.fetchIsLogin()
-    localStorage.getItem('is_login') ? this.is_login = true : this.is_login = false
-
     this.fetchCategory()
   },
   created() {
@@ -282,7 +283,7 @@ export default {
         this.$router.push({
           name: 'write_article',
           params: {
-            email: this.form.email,
+            email: JSON.parse(localStorage.getItem('userinfo')).email,
           }
         });
       }

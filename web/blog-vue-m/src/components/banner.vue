@@ -87,25 +87,35 @@ export default {
         let token = localStorage.getItem('token')
       fetchUserInfo(token).then(res => {
         this.response = res.data.data || []
-        // localStorage.setItem('email', this.response.email)
         localStorage.setItem('userinfo', JSON.stringify(this.response))
-        // localStorage.setItem('is_login', this.response.is_login)
       }).catch(err => {
         console.log(err)
       })
     },
     getQQ() {
       const h = this.$createElement;
-      this.$msgbox({
-        title: 'QQ账户',
-        message: h('p', null, [
-          h('i', { style: 'color: teal' }, JSON.parse(localStorage.getItem('userinfo')).qq + '\n'),
-          h('span', null, '请复制到QQ添加好友！ '),
-        ]),
-        showCancelButton: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      });
+      if (!JSON.parse(localStorage.getItem("userinfo")).is_login) {
+        this.$msgbox({
+          title: 'QQ账户',
+          message: h('p', null, [
+            h('i', { style: 'color: teal' }, '请先登录！ '),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        });
+      } else {
+        this.$msgbox({
+          title: 'QQ账户',
+          message: h('p', null, [
+            h('i', { style: 'color: teal' }, JSON.parse(localStorage.getItem('userinfo')).qq + '\n'),
+            h('span', null, '请复制到QQ添加好友！ '),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        });
+      }
     }
   }
 }

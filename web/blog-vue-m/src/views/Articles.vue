@@ -1,6 +1,6 @@
 <template>
     <div class="articles">
-        <banner></banner>
+        <banner :src="this.postList.banner_path"></banner>
         <div class="site-content animate">
             <!-- 文章目录 -->
             <div id="article-menus">
@@ -115,9 +115,11 @@
               for(let i=6;i>0;i--){
                   let temp = []
                   let e = document.querySelector(".entry-content").querySelectorAll(`h${i}`)
-                  for (let j=0;j<e.length;j++){
+                console.log("-------------",e)
+                for (let j=0;j<e.length;j++){
                       let child = this.fetchH(arr,e[j].offsetTop,(j+1 === e.length)?undefined:e[j+1].offsetTop)
-                      temp.push({
+                  console.log("---------------------------", e[j].id)
+                  temp.push({
                           h: i,
                           title: e[j].innerText,
                           id: e[j].id,
@@ -134,10 +136,16 @@
         },
         mounted(){
             this.fetchArticle()
-            this.createMenus()
         },
         created() {
             this.getComment()
+        },
+        watch: {
+          postList(){
+              this.$nextTick(() => {
+                  this.createMenus()
+              })
+          }
         }
     }
 </script>

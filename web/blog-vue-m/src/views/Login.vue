@@ -120,7 +120,6 @@ export default {
               });
             } else {
               localStorage.setItem('token', res.data.data.token);
-              localStorage.setItem('is_login', true);
               this.$message({
                 message: '登录成功',
                 type: 'success'
