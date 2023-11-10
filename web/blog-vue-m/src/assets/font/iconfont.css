@@ -63,3 +63,9 @@
   content: "\e605";
 }
 
+/*
+点赞的图标
+*/
+.iconlike:before {
+  content: "\e607";
+}

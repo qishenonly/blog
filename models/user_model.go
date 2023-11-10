@@ -101,6 +101,9 @@ type UserModel struct {
 	// 收藏的文章列表
 	CollectArticles []ArticleModel `gorm:"many2many:user_collect;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"collect_articles"`
 
+	// 点赞的文章列表
+	LikeArticles []ArticleModel `gorm:"many2many:user_upvote;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"like_articles"`
+
 	// 关注的用户列表
 	FollowUsers []UserModel `gorm:"many2many:user_follow_user;foreignkey:ID;association_foreignkey:ID;association_jointable_foreignkey:ID;jointable_foreignkey:ID;" json:"follow_users"`
 

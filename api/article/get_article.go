@@ -63,6 +63,7 @@ func (aa *ArticleApi) GetArticle(c *gin.Context) {
 		return
 	}
 
+	// 获取评论
 	commentInfo := make([]CommentInfo, 0)
 	if err := global.DB.Model(&models.CommentModel{}).Where("article_id = ?",
 		id).Find(&commentInfo).Error; err != nil {
@@ -91,6 +92,14 @@ func (aa *ArticleApi) GetArticle(c *gin.Context) {
 	if err := global.DB.Where("id = ?", article.CategoryID).First(&category).Error; err != nil {
 		global.Logger.Error("获取分类失败: ", err)
 		utils.NewFailResponse("获取分类失败", c)
+		return
+	}
+
+	// 浏览量+1
+	article.PageView++
+	if err := global.DB.Model(&article).Where("id = ?", id).Update("page_view", article.PageView).Error; err != nil {
+		global.Logger.Error("更新浏览量失败: ", err)
+		utils.NewFailResponse("更新浏览量失败", c)
 		return
 	}
 

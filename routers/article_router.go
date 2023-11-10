@@ -20,4 +20,7 @@ func (router RouterGroup) InitArticleRouter() {
 	// 写文章
 	router.POST("/article/write", articleApi.WriteArticle)
 
+	// 点赞
+	router.POST("/article/upvote", articleApi.Upvote)
+
 }
