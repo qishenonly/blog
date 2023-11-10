@@ -262,7 +262,6 @@ export default {
       )
     },
     async onSubmit() {
-      console.log("提交", this.coverList[0].url)
       if (this.coverList.length === 0) {
         this.$message.error('请上传封面')
         return
@@ -281,6 +280,9 @@ export default {
         this.$message.error('请选择分类')
         return
       }
+
+      this.content = this.replaceHeadingsWithIds(this.content);
+      console.log("content", this.content)
 
       let articleData = {
         title: this.title,
@@ -306,7 +308,29 @@ export default {
           }
       )
     },
-  }
+    replaceHeadingsWithIds(content) {
+      const reg = /<h(\d+)[^>]*>([^<]+)<\/h\1>/g;
+
+      return content.replace(reg, (match, headingLevel, headingText) => {
+        const id = headingText.trim().toLowerCase().replace(/\s+/g, '-');
+        return `<h${headingLevel} id="${id}">${headingText}</h${headingLevel}>`;
+      });
+    }
+  },
+  // watch: {
+  //   content(newVal) {
+  //     const reg = /<h(\d+)[^>]*>([^<]+)<\/h\1>/g;
+  //
+  //     newVal = newVal.replace(reg, (match, headingLevel, headingText) => {
+  //       const id = headingText.trim().toLowerCase().replace(/\s+/g, '-');
+  //       const newHeading = `<h${headingLevel} id="${id}">${headingText}</h${headingLevel}>`;
+  //       return newHeading;
+  //     });
+  //
+  //     this.content = newVal;
+  //   },
+  // },
+
 }
 </script>
 
