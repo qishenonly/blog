@@ -1,0 +1,46 @@
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  db: blog_db
+  user: root
+  password: root
+  log_level: dev
+
+flydb:
+  dir_path: /home/adminonly/blog/cache_data
+  data_file_size: 268435456 # 256MB
+  sync_write: false
+
+logger:
+  level: info
+  prefix: "[gin-blog]"
+  director: log
+  show_line: true
+  log_in_console: true
+
+system:
+  host: "0.0.0.0"
+  port: 8080
+  env: debug
+
+email:
+  host: smtp.163.com
+  port: 465
+  user: bytestorage@163.com
+  password: AAHVBYAUMFQIATIA
+  default_from_email: bytestorage@163.com
+  use_tls: true
+  use_ssl: false
+
+qq:
+  app_id: xxx
+  app_key: xxx
+  redirect_url: xxx
+
+jwt:
+  secret: xxx
+  expire: 3
+  issuer: blog
+
+upload:
+  url: 127.0.0.1:8080
