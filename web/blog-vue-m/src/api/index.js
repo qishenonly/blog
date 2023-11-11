@@ -175,6 +175,17 @@ export function fetchToArticleUpvote(data, token) {
     });
 }
 
+export function fetchToArticleCancelUpvote(data, token) {
+    return request({
+        url: '/article/cancel_upvote',
+        method: 'post',
+        headers: {
+            'Authorization': token // 将 Token 添加到 Authorization 头部
+        },
+        data: data,
+    });
+}
+
 export function fetchArticle(id) {
     return request({
         url: `/article/detail/${id}`,

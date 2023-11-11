@@ -23,4 +23,7 @@ func (router RouterGroup) InitArticleRouter() {
 	// 点赞
 	router.POST("/article/upvote", articleApi.Upvote)
 
+	// 取消点赞
+	router.POST("/article/cancel_upvote", articleApi.CancelUpvote)
+
 }

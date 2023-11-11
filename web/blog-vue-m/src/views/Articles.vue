@@ -75,7 +75,7 @@
     import sectionTitle from '@/components/section-title'
     import comment from '@/components/comment'
     import menuTree from '@/components/menu-tree'
-    import {fetchArticle, fetchComment, fetchToArticleUpvote} from '../api'
+    import {fetchArticle, fetchComment, fetchToArticleCancelUpvote, fetchToArticleUpvote} from '../api'
     import {int} from "mockjs/src/mock/random/basic";
     export default {
         name: 'articles',
@@ -142,11 +142,20 @@
               this.menus = arr
           },
           upvote() {
+              if (!JSON.parse(localStorage.getItem("userinfo"))['is_login']) {
+                  this.$message({
+                      message: '请先登录',
+                      type: 'warning'
+                  })
+                  return
+              }
               let data = {
                 article_id : parseInt(this.$route.params.id)
               }
               fetchToArticleUpvote(data, localStorage.getItem("token")).then(res => {
-                this.postList.like_num = res.data.data.like_num
+                if (res.data.data.like_num) {
+                  this.postList.like_num = res.data.data.like_num
+                }
                 let info = {
                   [this.$route.params.id] : true,
                 }
@@ -154,22 +163,43 @@
                 this.$nextTick(() => {
                   this.article_upvote = true
                 });
+                this.$message({
+                  message: '点赞成功',
+                  type: 'success'
+                })
               }).catch(err => {
                 console.log(err)
               })
             },
           downvote() {
-            this.$message({
-              message: '您已经点过赞了',
-              type: 'warning'
-            })
-            this.$nextTick(() => {
-              this.article_upvote = false
-            });
-            let info = {
-              [this.$route.params.id] : false,
+            if (!JSON.parse(localStorage.getItem("userinfo"))['is_login']) {
+              this.$message({
+                message: '请先登录',
+                type: 'warning'
+              })
+              return
             }
-            localStorage.setItem("article_upvote", JSON.stringify(info))
+            let data = {
+              article_id : parseInt(this.$route.params.id)
+            }
+            fetchToArticleCancelUpvote(data, localStorage.getItem("token")).then(res => {
+              if (res.data.data.like_num) {
+                this.postList.like_num = res.data.data.like_num
+              }
+              let info = {
+                [this.$route.params.id] : false,
+              }
+              localStorage.setItem("article_upvote", JSON.stringify(info))
+              this.$nextTick(() => {
+                this.article_upvote = false
+              });
+              this.$message({
+                message: '取消点赞成功',
+                type: 'success'
+              })
+            }).catch(err => {
+              console.log(err)
+            })
           }
         },
         mounted(){
