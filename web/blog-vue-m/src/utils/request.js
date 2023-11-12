@@ -4,7 +4,9 @@ import store from '@/store'
 // create an axios instance
 const service = axios.create({
     // baseURL: process.env.VUE_APP_BASE_DEV_API,
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://47.120.47.23:8080/api",
+    // devURL
+    // devURL: "http://localhost:8080/api",
     timeout: 5000 // request timeout
 })
 
